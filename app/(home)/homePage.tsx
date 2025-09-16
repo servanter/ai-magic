@@ -111,13 +111,12 @@ export default function HomePage({
           <p className="text-sm font-semibold">Star on GitHub</p>
         </a>
       </div>
-      <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900">
+      <h1 className="sm:text-6xl text-4xl max-w-[900px] font-bold text-slate-900">
         {siteConfig.description}
       </h1>
 
       <p className="text-slate-500 mt-5">
-        {formatNumber({ value: Number(usage) + currentUses })} Excel formulas
-        generated so far.
+        {formatNumber({ value: Number(usage) + currentUses })} Avatars generated so far.
       </p>
       <form className="max-w-xl w-full" onSubmit={onSubmit}>
         <div className="flex mt-10 items-center space-x-3">

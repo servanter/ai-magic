@@ -18,7 +18,7 @@ const Footer = () => {
           </Link>
           <div>{" • "}</div>
           <Link href="https://smartexcel.cc/" target="_blank">
-            Smart Excel
+            AI Image Generator
           </Link>
           <div>{" • "}</div>
           <Link href="https://landingpage.weijunext.com/" target="_blank">
