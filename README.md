@@ -19,6 +19,7 @@ This project uses the [ChatGPT API](https://openai.com/api/) and the [Vercel AI 
 
 
 
+
 ## Stack 
 
 SmartExcel is built on the following stack:
