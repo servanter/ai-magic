@@ -90,7 +90,6 @@ export default function HomePage({
   return (
     <>
 
-
       <div
         className="mx-auto mt-6 flex items-center justify-center space-x-5"
         style={{ animationDelay: "0.3s", animationFillMode: "forwards" }}
@@ -124,7 +123,8 @@ export default function HomePage({
       </p>
 
       {/* 上传预览组件 */}
-      <UploadPreviewCard />
+      <UploadPreviewCard user={user} />
+
 
       <form className="max-w-xl w-full" onSubmit={onSubmit}>
         <div className="flex mt-10 items-center space-x-3">

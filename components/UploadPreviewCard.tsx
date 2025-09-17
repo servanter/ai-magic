@@ -1,13 +1,16 @@
+'use client';
 import { Button } from '@/components/ui/button';
 import { imageConfigs } from '@/config/imageConfig';
+import { UserInfo } from "@/types/user";
 import { useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 
 interface UploadPreviewCardProps {
   onUpload?: (file: File) => void;
+  user: UserInfo | null;
 }
 
-export function UploadPreviewCard({ onUpload }: UploadPreviewCardProps) {
+export function UploadPreviewCard({ onUpload, user }: UploadPreviewCardProps) {
   const [preview, setPreview] = useState<string | null>(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
 
@@ -33,6 +36,12 @@ export function UploadPreviewCard({ onUpload }: UploadPreviewCardProps) {
   };
 
   const handleSubmit = async () => {
+
+    if (!user || !user.userId) {
+      toast.error("Please login first");
+      return;
+    }
+
     if (!preview) {
       toast.error('请先上传图片');
       return;
@@ -45,7 +54,7 @@ export function UploadPreviewCard({ onUpload }: UploadPreviewCardProps) {
     }
 
     if (selectedImageIndex === null) {
-      toast.error('请选择一张图片');
+      toast.error('请选择一种风格');
       return;
     }
 
