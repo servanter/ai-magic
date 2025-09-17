@@ -3,7 +3,7 @@ import { SiteConfig } from "@/types/siteConfig"
 const baseSiteConfig = {
   name: "Smart Excel",
   description:
-    "Generate the Excel formulas in seconds.",
+    "Support uploading any photo to quickly generate cartoon avatars in various styles, meeting all social platforms’ avatar needs.",
   url: "https://smartexcel.cc",
   ogImage: "https://smartexcel.cc/og.jpg",
   metadataBase: new URL("https://www.smartexcel.cc"),
