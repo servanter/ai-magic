@@ -1,6 +1,6 @@
 import { MEMBERSHIP_ROLE_VALUE } from "@/lib/constants";
 import prisma from "@/lib/prisma";
-import { LemonsqueezySubscriptionURLPatch, SubScriptionInfo } from "@/types/subscribe";
+import { LemonsqueezySubscriptionURLPatch } from "@/types/subscribe";
 import { UserId } from "@/types/user";
 import { client } from "./lemons";
 
@@ -15,11 +15,16 @@ export async function getUserSubscriptionPlan({ userId }: UserId) {
     },
   });
 
+  console.log('aaaaa')
+
   if (!user) throw new Error("User not found");
   if (!user.subscriptionId) return null
 
+
+
   const membershipExpire = (user.currentPeriodEnd || 0) * 1000
   const subscription = await client.retrieveSubscription({ id: user.subscriptionId });
+
 
   const attributes = subscription.data.attributes
   const urls = attributes.urls as LemonsqueezySubscriptionURLPatch
@@ -29,13 +34,17 @@ export async function getUserSubscriptionPlan({ userId }: UserId) {
     user.variantId &&
     membershipExpire > Date.now().valueOf();
 
+
+  console.log('ccc')
   // If user has a pro plan, check cancel status on Stripe.
   let isCanceled = false;
   if (isMembership && user.subscriptionId) {
     isCanceled = attributes.cancelled;
   }
 
-  return {
+  console.log('aaaaa')
+
+  const result = {
     subscriptionId: user.subscriptionId,
     membershipExpire: isMembership ? membershipExpire : 0,
     customerId: user.customerId,
@@ -44,5 +53,19 @@ export async function getUserSubscriptionPlan({ userId }: UserId) {
     isCanceled,
     updatePaymentMethodURL: urls.update_payment_method,
     customerPortal: urls.customer_portal,
-  } as SubScriptionInfo;
+  }
+
+  console.log("getUserSubscriptionPlan", result)
+
+  return result
+  // return {
+  //    subscriptionId: user.subscriptionId,
+  //   membershipExpire: isMembership ? membershipExpire : 0,
+  //   customerId: user.customerId,
+  //   variantId: user.variantId,
+  //   role: isMembership ? MEMBERSHIP_ROLE_VALUE : 0, // 2 : 0
+  //   isCanceled,
+  //   updatePaymentMethodURL: urls.update_payment_method,
+  //   customerPortal: urls.customer_portal,
+  // } as SubScriptionInfo;
 }

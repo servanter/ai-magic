@@ -2,17 +2,24 @@
 import { Button } from '@/components/ui/button';
 import { imageConfigs } from '@/config/imageConfig';
 import { UserInfo } from "@/types/user";
-import { useRef, useState } from 'react';
+import { UserBalance } from '@/types/userBalance';
+import dayjs from 'dayjs';
+import { useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
+
 
 interface UploadPreviewCardProps {
   onUpload?: (file: File) => void;
   user: UserInfo | null;
+  userBalance?: UserBalance | null;
 }
 
-export function UploadPreviewCard({ onUpload, user }: UploadPreviewCardProps) {
+export function UploadPreviewCard({ onUpload, user, userBalance }: UploadPreviewCardProps) {
   const [preview, setPreview] = useState<string | null>(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
+  const [currentUses, setCurrentUses] = useState(0);
+  const [remainingCredits, setRemainingCredits] = useState(0);
+  const [boostPackRemainingCredits, setBoostPackRemainingCredits] = useState(0);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -34,6 +41,8 @@ export function UploadPreviewCard({ onUpload, user }: UploadPreviewCardProps) {
   const triggerFileInput = () => {
     fileInputRef.current?.click();
   };
+
+
 
   const handleSubmit = async () => {
 
@@ -81,10 +90,22 @@ export function UploadPreviewCard({ onUpload, user }: UploadPreviewCardProps) {
     }
   };
 
+
+  const { remaining = 0, boostPackRemaining = 0 } = userBalance || {};
+
+  useEffect(() => {
+    const newRemaining = remaining - currentUses;
+    const newBoostRemaining = boostPackRemaining - Math.max(0, currentUses - remaining);
+
+    setRemainingCredits(Math.max(0, newRemaining));
+    setBoostPackRemainingCredits(Math.max(0, newBoostRemaining));
+  }, [remaining, boostPackRemaining, currentUses]);
+
+
   return (
-    <div className="flex flex-col gap-6 p-6 bg-white rounded-lg shadow-lg mt-6 w-full">
+    <div className="flex flex-col gap-6 p-6 bg-white rounded-lg shadow-lg mt-6 w-[1200px]">
       {/* 组件标题 */}
-      <h2 className="text-xl font-semibold text-gray-800">上传预览卡片</h2>
+      <h2 className="text-xl font-semibold text-gray-800 text-left">AI IMAGE</h2>
 
       {/* 内容区域 */}
       <div className="flex gap-6 min-h-0">
@@ -96,7 +117,7 @@ export function UploadPreviewCard({ onUpload, user }: UploadPreviewCardProps) {
           </div>
 
           <div
-            className="border-2 border-dashed min-h-[200px] border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-blue-500 transition-colors jusetify-center flex flex-col items-center justify-center"
+            className="border-2 border-dashed min-h-[200px] border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-blue-500 transition-colors  flex flex-col items-center justify-center"
             onClick={triggerFileInput}
           >
             <input
@@ -120,11 +141,11 @@ export function UploadPreviewCard({ onUpload, user }: UploadPreviewCardProps) {
 
           {/* 图片切换区域 */}
           <div className="flex flex-col gap-2 mt-4">
-            <p className="text-sm text-gray-600">点击下方图片切换预览</p>
+            <p className="text-sm text-gray-600 text-left">选择一种风格</p>
             <div className="border-b border-gray-200 w-full"></div>
           </div>
 
-          <div className="flex gap-4 mt-4 max-w-full">
+          <div className="flex gap-4 mt-2 max-w-full">
             {imageConfigs.map((image, index) => (
               <div
                 key={index}
@@ -143,20 +164,38 @@ export function UploadPreviewCard({ onUpload, user }: UploadPreviewCardProps) {
               </div>
             ))}
           </div>
+          <div className="border-b border-gray-200 w-full"></div>
+          <div className='flex gap-2 items-center text-gray-500 text-xs justify-center'>
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" />
+              <path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clip-rule="evenodd" />
+            </svg>
+            <span className="">当前积分：   {boostPackRemainingCredits <= 0 ? 0 : boostPackRemainingCredits} </span>
+            <span className='h-3'>|</span>
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <span className="">会员到期时间：
+              {userBalance && userBalance.membershipExpire
+                ? dayjs(userBalance.membershipExpire).format('YYYY-MM-DD HH:mm')
+                : '无'}
+            </span>
+          </div>
 
-          <div className='w-full flex justify-between gap-4 mt-4'>
+          <div className='w-full flex justify-between gap-4 '>
             <Button className='h-10 w-2/4 bg-gray-100 text-gray-800 hover:bg-gray-200 text-sm' onClick={triggerFileInput}>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="size-4 mr-2">
-                <path fillRule="evenodd" d="M6.701 2.25c.577-1 2.02-1 2.598 0l5.196 9a1.5 1.5 0 0 1-1.299 2.25H2.804a1.5 1.5 0 0 1-1.3-2.25l5.197-9ZM8 4a.75.75 0 0 1 .75.75v3a.75.75 0 1 1-1.5 0v-3A.75.75 0 0 1 8 4Zm0 8a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" clipRule="evenodd" />
+
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
               </svg>
-              Select Image
+              选择图片
             </Button>
 
             <Button className='h-10 w-2/4 bg-red-100 text-red-800 hover:bg-red-200 text-sm' onClick={handleSubmit}>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="size-4 mr-2">
-                <path d="M8.75 6h-1.5V3.56L6.03 4.78a.75.75 0 0 1-1.06-1.06l2.5-2.5a.75.75 0 0 1 1.06 0l2.5 2.5a.75.75 0 1 1-1.06 1.06L8.75 3.56V6H11a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h2.25v5.25a.75.75 0 0 0 1.5 0V6Z" />
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
               </svg>
-              Submit Image
+              提交制作
             </Button>
 
           </div>
@@ -173,6 +212,7 @@ export function UploadPreviewCard({ onUpload, user }: UploadPreviewCardProps) {
           <div className="flex items-center justify-center bg-gray-100 rounded-lg min-h-[300px]">
             <p className="text-gray-400">制作中...</p>
           </div>
+
         </div>
       </div>
     </div>

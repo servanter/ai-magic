@@ -38,6 +38,12 @@ export default function HomePage({
   const [content, setContent] = useState("");
   const [language, setLanguage] = useState<LanguageType>("English");
   const answerRef = useRef<null | HTMLDivElement>(null);
+  const userBalance = {
+    remaining,
+    boostPackRemaining,
+    membershipExpire,
+    boostPackExpire,
+  };
 
   const scrollToAnswer = () => {
     if (answerRef.current !== null) {
@@ -123,7 +129,8 @@ export default function HomePage({
       </p>
 
       {/* 上传预览组件 */}
-      <UploadPreviewCard user={user} />
+
+      <UploadPreviewCard user={user} userBalance={userBalance} />
 
 
       <form className="max-w-xl w-full" onSubmit={onSubmit}>

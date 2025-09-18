@@ -21,6 +21,7 @@ export default async function BillingPage() {
     userId: user.userId,
   });
 
+  console.log("subscription", subscription);
   let subscriptionPlan: UserSubscriptionPlan = {
     role: 0,
     isPro: false,
@@ -50,6 +51,7 @@ export default async function BillingPage() {
       updatePaymentMethodURL: subscription.updatePaymentMethodURL,
     };
   }
+  console.log("subscriptionPlan", subscriptionPlan);
 
   return (
     <div className="container grid gap-12 md:grid-cols-[200px_1fr]">

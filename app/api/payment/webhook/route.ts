@@ -63,7 +63,7 @@ const singlePayDeal = async (first_order_item: any, payload: any, userId: string
     // Check if the webhook event was for this product or not
     if (
       parseInt(first_order_item.product_id, 10) !==
-      parseInt(process.env.LEMON_SQUEEZY_PRODUCT_ID as string, 10)
+      parseInt(process.env.LEMON_SQUEEZY_SINGLE_PRODUCT_ID as string, 10)
     ) {
       return NextResponse.json({ message: "Invalid product" }, { status: 403 });
     }
