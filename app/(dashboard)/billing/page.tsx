@@ -17,11 +17,15 @@ export const metadata = {
 
 export default async function BillingPage() {
   const user = (await getCurrentUser()) as UserInfo;
+  if (!user || !user.userId) {
+    throw new Error("User not authenticated");
+  }
+
   const subscription: SubScriptionInfo | null = await getUserSubscriptionPlan({
     userId: user.userId,
-  });
+  }) as SubScriptionInfo | null;
 
-  console.log("subscription", subscription);
+
   let subscriptionPlan: UserSubscriptionPlan = {
     role: 0,
     isPro: false,

@@ -16,10 +16,12 @@ interface UploadPreviewCardProps {
 
 export function UploadPreviewCard({ onUpload, user, userBalance }: UploadPreviewCardProps) {
   const [preview, setPreview] = useState<string | null>(null);
-  const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0); // 默认选择第一张图片
   const [currentUses, setCurrentUses] = useState(0);
   const [remainingCredits, setRemainingCredits] = useState(0);
   const [boostPackRemainingCredits, setBoostPackRemainingCredits] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const [resultImage, setResultImage] = useState<string | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -62,16 +64,19 @@ export function UploadPreviewCard({ onUpload, user, userBalance }: UploadPreview
       return;
     }
 
-    if (selectedImageIndex === null) {
-      toast.error('请选择一种风格');
-      return;
-    }
-
     const formData = new FormData();
     formData.append('file', file);
     formData.append('type', imageConfigs[selectedImageIndex].type.toString());
 
+    // 显示加载中的toast提示，设置为永久显示直到手动关闭
+    const loadingToast = toast.loading('生成中...', {
+      duration: Infinity // 设置为无限时长，只有手动调用dismiss才会消失
+    });
+
     try {
+      // 设置加载状态为true
+      setIsLoading(true);
+
       const response = await fetch('/api/upload', {
         method: 'POST',
         body: formData,
@@ -82,11 +87,28 @@ export function UploadPreviewCard({ onUpload, user, userBalance }: UploadPreview
       }
 
       const result = await response.json();
-      console.log('Upload result:', result);
-      toast.success('上传成功');
+
+      // 销毁加载中的toast
+      toast.dismiss(loadingToast);
+      if (result.code !== 0) {
+        toast.error('上传失败，请重试');
+        return;
+      }
+
+      console.log('Upload result++++++++++:', result);
+      if (result && result.img) {
+        setResultImage(result.img);
+      }
+      toast.success('成功');
+
     } catch (error) {
       console.error('Error uploading file:', error);
+      // 销毁加载中的toast，显示错误提示
+      toast.dismiss(loadingToast);
       toast.error('上传失败，请重试');
+    } finally {
+      // 无论成功还是失败，都将加载状态设置为false
+      setIsLoading(false);
     }
   };
 
@@ -112,7 +134,7 @@ export function UploadPreviewCard({ onUpload, user, userBalance }: UploadPreview
         {/* 左侧上传区域 */}
         <div className="w-1/2 flex flex-col gap-4 min-h-0">
           <div className="flex flex-col gap-2">
-            <h3 className="text-sm font-medium text-gray-600 text-left">上传区域</h3>
+            <h3 className="text-sm font-medium text-gray-600 text-left">Upload Area</h3>
             <div className="border-b border-gray-200 w-full"></div>
           </div>
 
@@ -135,13 +157,13 @@ export function UploadPreviewCard({ onUpload, user, userBalance }: UploadPreview
                 className="max-h-80 max-w-full object-contain"
               />
             ) : (
-              <p className="text-gray-500">点击或拖拽文件到此处上传</p>
+              <p className="text-gray-500">Click or drag and drop files here to upload</p>
             )}
           </div>
 
           {/* 图片切换区域 */}
           <div className="flex flex-col gap-2 mt-4">
-            <p className="text-sm text-gray-600 text-left">选择一种风格</p>
+            <p className="text-sm text-gray-600 text-left">Choose Style</p>
             <div className="border-b border-gray-200 w-full"></div>
           </div>
 
@@ -170,12 +192,12 @@ export function UploadPreviewCard({ onUpload, user, userBalance }: UploadPreview
               <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" />
               <path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clip-rule="evenodd" />
             </svg>
-            <span className="">当前积分：   {boostPackRemainingCredits <= 0 ? 0 : boostPackRemainingCredits} </span>
+            <span className="">Current Credits：   {boostPackRemainingCredits <= 0 ? 0 : boostPackRemainingCredits} + {remainingCredits <= 0 ? 0 : remainingCredits} (VIP)</span>
             <span className='h-3'>|</span>
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
-            <span className="">会员到期时间：
+            <span className="">Member Expire Time：
               {userBalance && userBalance.membershipExpire
                 ? dayjs(userBalance.membershipExpire).format('YYYY-MM-DD HH:mm')
                 : '无'}
@@ -188,14 +210,14 @@ export function UploadPreviewCard({ onUpload, user, userBalance }: UploadPreview
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
               </svg>
-              选择图片
+              Choose Image
             </Button>
 
             <Button className='h-10 w-2/4 bg-red-100 text-red-800 hover:bg-red-200 text-sm' onClick={handleSubmit}>
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
               </svg>
-              提交制作
+              Submit
             </Button>
 
           </div>
@@ -205,12 +227,31 @@ export function UploadPreviewCard({ onUpload, user, userBalance }: UploadPreview
         {/* 右侧预览区域 */}
         <div className="w-1/2 flex flex-col gap-4">
           <div className="flex flex-col gap-2">
-            <h3 className="text-sm font-medium text-gray-600 text-left">制作结果</h3>
+            <h3 className="text-sm font-medium text-gray-600 text-left">Result</h3>
             <div className="border-b border-gray-200 w-full"></div>
+
           </div>
 
-          <div className="flex items-center justify-center bg-gray-100 rounded-lg min-h-[300px]">
-            <p className="text-gray-400">制作中...</p>
+          <div className="border border-dashed border-gray-300 p-2 shadow-inner flex items-center justify-center h-[450px] w-[80%] mx-auto mt-4 overflow-hidden">
+            {isLoading ? (
+              <div className="flex space-x-2 animate-pulse">
+                <div className="w-3 h-3 bg-gray-500 rounded-full"></div>
+                <div className="w-3 h-3 bg-gray-500 rounded-full"></div>
+                <div className="w-3 h-3 bg-gray-500 rounded-full"></div>
+              </div>
+            ) : resultImage ? (
+              <img
+                src={resultImage}
+                alt="处理结果"
+                className="max-w-[100%] object-contain p-1 rounded-lg"
+              />
+            ) : (
+              <img
+                src={imageConfigs[selectedImageIndex].href}
+                alt={imageConfigs[selectedImageIndex].name}
+                className="max-w-[100%] object-contain p-1 rounded-lg"
+              />
+            )}
           </div>
 
         </div>

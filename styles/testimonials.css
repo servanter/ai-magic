@@ -1,0 +1,37 @@
+/* 评价轮播图自定义样式 */
+
+.testimonial-card {
+  transition: all 0.3s ease;
+}
+
+.testimonial-card:hover {
+  transform: translateY(-5px);
+}
+
+.testimonial-avatar {
+  border: 2px solid #e5e7eb;
+}
+
+/* 自定义动画效果 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.testimonial-enter {
+  animation: fadeIn 0.5s ease forwards;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .testimonial-container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}

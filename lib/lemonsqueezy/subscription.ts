@@ -15,8 +15,6 @@ export async function getUserSubscriptionPlan({ userId }: UserId) {
     },
   });
 
-  console.log('aaaaa')
-
   if (!user) throw new Error("User not found");
   if (!user.subscriptionId) return null
 
@@ -34,15 +32,13 @@ export async function getUserSubscriptionPlan({ userId }: UserId) {
     user.variantId &&
     membershipExpire > Date.now().valueOf();
 
-
-  console.log('ccc')
   // If user has a pro plan, check cancel status on Stripe.
   let isCanceled = false;
   if (isMembership && user.subscriptionId) {
     isCanceled = attributes.cancelled;
   }
 
-  console.log('aaaaa')
+
 
   const result = {
     subscriptionId: user.subscriptionId,

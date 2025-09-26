@@ -25,13 +25,10 @@ export async function POST(request: Request) {
   }
   const secret = process.env.LEMONS_SQUEEZY_SIGNATURE_SECRET as string;
   const hmac = crypto.createHmac("sha256", secret);
-  const digest = Buffer.from(hmac.update(body).digest("hex"), "utf8");
-  const signature = Buffer.from(
-    Array.isArray(sigString) ? sigString.join("") : sigString || "",
-    "utf8"
-  );
+  const digest = hmac.update(new Uint8Array(body)).digest("hex");
+  const signature = Array.isArray(sigString) ? sigString.join("") : sigString || "";
   // validate signature
-  if (!crypto.timingSafeEqual(digest, signature)) {
+  if (digest !== signature) {
     return NextResponse.json({ message: "Invalid signature" }, { status: 403 });
   }
 

@@ -169,3 +169,18 @@ export const clearTodayUsage = async ({ userId }: UserId) => {
   const userDateUsageKey = getUserDateUsageKey({ userId })
   await redis.setex(userDateUsageKey, DATE_USAGE_KEY_EXPIRE, 0)
 }
+
+// 扣减加油包次数
+// Decrement boost pack count
+export const decrementBoostPack = async ({ userId }: UserId) => {
+  const boostPackKey = await getBoostPackKey({ userId });
+  try {
+    const limit = await redis.get(boostPackKey); // 确保键存在 Ensure the key exists
+    console.log('limit', limit)
+    const remaining = await redis.decrby(boostPackKey, 10);
+    return { success: true, remaining };
+  } catch (error) {
+    console.error('An error occurred while decrementing boost pack:', error);
+    return { success: false, error: 'Failed to decrement boost pack' };
+  }
+};
