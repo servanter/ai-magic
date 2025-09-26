@@ -1,14 +1,15 @@
 import Link from "next/link";
-import { BsGithub, BsTwitterX, BsWechat } from "react-icons/bs";
+import { BsGithub, BsTwitterX } from "react-icons/bs";
 import { MdEmail } from "react-icons/md";
 
-import { SiBuymeacoffee, SiJuejin } from "react-icons/si";
+import { SiBuymeacoffee } from "react-icons/si";
+
 
 const ContactMe = () => {
   return (
     <div className="mx-auto flex flex-row items-center">
       <Link
-        href="mailto:weijunext@gmail.com"
+        href="mailto:zhy19890221@gmail.com"
         target="_blank"
         rel="noopener norefferer nofollow"
         className="mx-3 flex max-w-[24px] flex-col items-center justify-center"
@@ -16,7 +17,7 @@ const ContactMe = () => {
         <MdEmail className="text-lg" />
       </Link>
       <Link
-        href="https://github.com/weijunext"
+        href="https://github.com/servanter"
         target="_blank"
         rel="noopener norefferer nofollow"
         className="mx-3 flex max-w-[24px] flex-col items-center justify-center"
@@ -24,7 +25,7 @@ const ContactMe = () => {
         <BsGithub className="text-lg" />
       </Link>
       <Link
-        href="https://x.com/weijunext"
+        href="https://x.com/hongyanzha38268"
         target="_blank"
         rel="noopener norefferer nofollow"
         className="mx-3 flex max-w-[24px] flex-col items-center justify-center"
@@ -32,22 +33,7 @@ const ContactMe = () => {
         <BsTwitterX className="text-lg" />
       </Link>
       <Link
-        href="https://juejin.cn/user/26044008768029"
-        target="_blank"
-        rel="noopener norefferer nofollow"
-        className="mx-3 flex max-w-[24px] flex-col items-center justify-center"
-      >
-        <SiJuejin className="text-lg" />
-      </Link>
-      <Link
-        href="https://weijunext.com/make-a-friend"
-        target="_blank"
-        className="mx-3 flex max-w-[24px] flex-col items-center justify-center"
-      >
-        <BsWechat className="text-lg" />
-      </Link>
-      <Link
-        href="https://www.buymeacoffee.com/weijunext"
+        href="https://buymeacoffee.com/archerzhang"
         target="_blank"
         rel="noopener norefferer nofollow"
         className="mx-3 flex max-w-[24px] flex-col items-center justify-center"

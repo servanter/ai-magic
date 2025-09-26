@@ -17,9 +17,14 @@ export const metadata = {
 
 export default async function BillingPage() {
   const user = (await getCurrentUser()) as UserInfo;
+  if (!user || !user.userId) {
+    throw new Error("User not authenticated");
+  }
+
   const subscription: SubScriptionInfo | null = await getUserSubscriptionPlan({
     userId: user.userId,
-  });
+  }) as SubScriptionInfo | null;
+
 
   let subscriptionPlan: UserSubscriptionPlan = {
     role: 0,
@@ -50,6 +55,7 @@ export default async function BillingPage() {
       updatePaymentMethodURL: subscription.updatePaymentMethodURL,
     };
   }
+  console.log("subscriptionPlan", subscriptionPlan);
 
   return (
     <div className="container grid gap-12 md:grid-cols-[200px_1fr]">
