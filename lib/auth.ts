@@ -1,6 +1,6 @@
 import { ONE_DAY } from "@/lib/constants";
-import { getUserSubscriptionStatus } from "@/lib/lemonsqueezy/subscriptionFromStorage";
 import prisma from "@/lib/prisma";
+import { getUserSubscriptionStatus } from "@/lib/user/user";
 import { UserInfo } from "@/types/user";
 import { Account, NextAuthOptions, TokenSet } from "next-auth";
 import { JWT } from "next-auth/jwt";

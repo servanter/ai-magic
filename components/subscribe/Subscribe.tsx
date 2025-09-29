@@ -1,11 +1,9 @@
 import SubscribeCard from "@/components/subscribe/SubscribeCard";
-import { axios } from "@/lib/axios";
 import {
   BOOST_PACK_CREDITS,
-  BOOST_PACK_EXPIRE,
-  SUBSCRIPTION_VARIANT_KEY
+  BOOST_PACK_EXPIRE
 } from "@/lib/constants";
-import { CreateCheckoutResponse, SubscribeInfo } from "@/types/subscribe";
+import { SubscribeInfo } from "@/types/subscribe";
 import { UserInfo } from "@/types/user";
 import { loadStripe } from "@stripe/stripe-js";
 import { toast } from "react-hot-toast";
@@ -59,30 +57,6 @@ export default function Subscribe({ user }: { user: UserInfo | null }) {
   const getStartFreeVersion = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
-  const subscribe = async () => {
-    if (!user || !user.userId) {
-      toast.error("Please login first");
-      return;
-    }
-    try {
-      const { checkoutURL } = await axios.post<any, CreateCheckoutResponse>(
-        "/api/payment/subscribe",
-        {
-          userId: user.userId,
-          type: SUBSCRIPTION_VARIANT_KEY,
-        },
-        {
-          headers: {
-            token: user.accessToken,
-          },
-        }
-      );
-      window.location.href = checkoutURL;
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
 
   // 处理购买逻辑的函数
   async function handleBuy(productId: number) {
