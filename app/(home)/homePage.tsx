@@ -101,16 +101,6 @@ export default function HomePage({
       {/* 用户评价轮播图 */}
       <TestimonialCarousel />
 
-      {/* 订阅按钮链接 */}
-      <div className="my-8 text-center">
-        <a
-          href="/subscribe-button"
-          className="inline-block px-6 py-3 bg-blue-600 text-white font-medium rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-colors duration-200"
-        >
-          前往订阅页面
-        </a>
-      </div>
-
       <Toaster
         position="top-center"
         reverseOrder={false}

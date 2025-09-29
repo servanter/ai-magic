@@ -54,14 +54,5 @@ export async function getUserSubscriptionPlan({ userId }: UserId) {
   console.log("getUserSubscriptionPlan", result)
 
   return result
-  // return {
-  //    subscriptionId: user.subscriptionId,
-  //   membershipExpire: isMembership ? membershipExpire : 0,
-  //   customerId: user.customerId,
-  //   variantId: user.variantId,
-  //   role: isMembership ? MEMBERSHIP_ROLE_VALUE : 0, // 2 : 0
-  //   isCanceled,
-  //   updatePaymentMethodURL: urls.update_payment_method,
-  //   customerPortal: urls.customer_portal,
-  // } as SubScriptionInfo;
+
 }

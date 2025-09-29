@@ -1,6 +1,7 @@
 import { ONE_DAY } from '@/lib/constants';
 import redis from '@/lib/redis';
 import { boostPack } from '@/lib/upgrade/upgrade';
+import { clearTodayUsage } from '@/lib/usage/usage';
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
@@ -8,7 +9,6 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export async function POST(request: Request) {
   const body = await request.text();
-  console.log('body11111', body)
   const signature = request.headers.get('stripe-signature')!;
 
   let event: Stripe.Event;
@@ -41,15 +41,20 @@ export async function POST(request: Request) {
         where: { userId: userId.toString() },
         select: { userId: true, email: true, username: true },
       });
-      if (productId === '1') {
+      if (productId && productId === '1' && userId && userId.length > 0) {
         singlePayDeal(userId, paymentIntent.id)
-      } else {
-
       }
       if (!user) return NextResponse.json({ message: "Your account was not found" }, { status: 401 });
+      break;
+    case 'customer.subscription.created':
+      const subscription = event.data.object as Stripe.Subscription;
+      console.log('订阅创建成功:', subscription.id);
+      console.log(`订阅用户ID: ${subscription.metadata.userId}, 订阅产品ID: ${subscription.metadata.productId}`);
 
-
-      // 在这里执行支付成功后的业务逻辑
+      if (subscription.metadata.userId && subscription.metadata.productId) {
+        await memberPayDeal(subscription.metadata.userId, subscription);
+      }
+      if (!subscription.metadata.userId) return NextResponse.json({ message: "Your account was not found" }, { status: 401 });
       break;
     case 'checkout.session.completed':
       const session = event.data.object as Stripe.Checkout.Session;
@@ -71,6 +76,40 @@ const singlePayDeal = async (userId: string, paymentIntentId: string) => {
     console.log('orderRedisRes', orderRedisRes);
     if (!orderRedisRes) {
       await redis.setex(key, ONE_DAY, paymentIntentId)    // 防止重复处理
+      await boostPack({ userId })
+    }
+    return NextResponse.json({ status: 200 });
+  } catch (e) {
+    console.log('single pay deal', e);
+    return NextResponse.json({ message: 'single pay something wrong' }, { status: 500 });
+  }
+}
+
+const memberPayDeal = async (userId: string, subscription: Stripe.Subscription) => {
+  try {
+    const key = 'order::' + subscription.id
+    const orderRedisRes = await redis.get(key)
+    console.log('orderRedisRes', orderRedisRes);
+    if (!orderRedisRes) {
+      await redis.setex(key, ONE_DAY, subscription.id)    // 防止重复处理
+
+      // 订阅 subscription
+      await prisma.user.update({
+        where: { userId },
+        data: {
+          subscriptionId: `${subscription.id}`,
+          customerId: `${subscription.customer}`,
+          currentPeriodEnd: subscription.items.data[0].current_period_end,
+        },
+      });
+
+      console.log('更新订阅', userId);
+      // 重置今天的积分
+      clearTodayUsage({ userId })
+
+      console.log('充值积分', userId);
+      return NextResponse.json({ status: 200 });
+      // 处理订阅
       await boostPack({ userId })
     }
     return NextResponse.json({ status: 200 });

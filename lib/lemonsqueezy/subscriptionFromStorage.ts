@@ -26,7 +26,6 @@ export async function getUserSubscriptionStatus({ userId, defaultUser }: { userI
 
   const membershipExpire = (user.currentPeriodEnd || 0) * 1000 // 13-digit timestamp or non-member
   const isMembership =
-    user.variantId &&
     membershipExpire > Date.now().valueOf();
 
   return {
