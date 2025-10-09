@@ -5,6 +5,7 @@ import Stripe from "stripe";
 
 // 初始化 Stripe 客户端
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
+console.log('STRIPE_SECRET_KEY==========', STRIPE_SECRET_KEY);
 
 /**
  * 创建 Stripe 结账会话
