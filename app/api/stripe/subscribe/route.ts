@@ -14,7 +14,7 @@ console.log('STRIPE_SECRET_KEY==========', process.env.NEXT_PUBLIC_STRIPE_SECRET
  * @param productName 产品名称
  * @returns Stripe 结账会话
  */
-async function createSingleCheckoutSession(userId: string, productId: number, productName: string) {
+async function createSingleCheckoutSession(userId: string, productId: string, productName: string) {
   console.log('STRIPE_SECRET_KEY==========', process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY);
   return await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
