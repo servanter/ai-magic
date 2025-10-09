@@ -7,7 +7,6 @@ import Subscribe from "@/components/subscribe/Subscribe";
 import TestimonialCarousel from "@/components/testimonials/TestimonialCarousel";
 import { UploadPreviewCard } from "@/components/UploadPreviewCard";
 import { siteConfig } from "@/config/site";
-import { formatNumber } from "@/lib/data";
 import { UserInfo } from "@/types/user";
 import { useEffect, useRef, useState } from "react";
 import { Toaster } from "react-hot-toast";
@@ -88,11 +87,6 @@ export default function HomePage({
       <h1 className="sm:text-6xl text-4xl max-w-[858px] font-bold text-slate-900">
         {siteConfig.description}
       </h1>
-
-      <p className="text-slate-500 mt-5">
-        {formatNumber({ value: Number(usage) + currentUses })} Avatars formulas
-        generated so far.
-      </p>
 
       {/* 上传预览组件 */}
 
