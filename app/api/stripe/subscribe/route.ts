@@ -92,7 +92,7 @@ console.log('STRIPE_SECRET_KEYaaaaaaa==========', process.env.NEXT_PUBLIC_STRIPE
     }
 
     // 使用提取的方法创建结账会话
-    const session = productId === 1 ? await createSingleCheckoutSession(user.userId, 'prod_T8SB2KQsiFVbHs', productName) :
+    const session = productId === 1 ? await createSingleCheckoutSession(user.userId, "prod_T8SB2KQsiFVbHs", productName) :
       await createMonthlyCheckoutSession(user.userId, productId, productName);
 
     console.log("创建的Stripe会话结果:", session);
