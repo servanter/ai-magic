@@ -41,7 +41,7 @@ export async function POST(request: Request) {
         where: { userId: userId.toString() },
         select: { userId: true, email: true, username: true },
       });
-      if (productId && productId === '1' && userId && userId.length > 0) {
+      if (productId && productId === 'prod_T8SB2KQsiFVbHs' && userId && userId.length > 0) {
         singlePayDeal(userId, paymentIntent.id)
       }
       if (!user) return NextResponse.json({ message: "Your account was not found" }, { status: 401 });
