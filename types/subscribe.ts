@@ -24,9 +24,7 @@ export interface SubScriptionInfo {
   subscriptionId: string | number;
   membershipExpire: number;
   customerId: string | null;
-  variantId: number | null;
   role: Role;
-  isCanceled?: boolean;
   updatePaymentMethodURL?: string;
   customerPortal?: string;
 }

@@ -1,6 +1,6 @@
 import { DATE_USAGE_KEY_EXPIRE, ROLES_LIMIT, getBoostPackKey, getUserDateUsageKey, getUserTotalUsageKey } from "@/lib/constants";
-import { getUserSubscriptionStatus } from "@/lib/lemonsqueezy/subscriptionFromStorage";
 import redis from "@/lib/redis";
+import { getUserSubscriptionStatus } from "@/lib/user/user";
 import { DateRemaining } from "@/types/usage";
 import { RemainingParams, Role, UserId } from "@/types/user";
 import 'server-only';

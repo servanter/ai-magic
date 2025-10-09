@@ -69,7 +69,7 @@ export function UploadPreviewCard({ onUpload, user, userBalance }: UploadPreview
     formData.append('type', imageConfigs[selectedImageIndex].type.toString());
 
     // 显示加载中的toast提示，设置为永久显示直到手动关闭
-    const loadingToast = toast.loading('生成中...', {
+    const loadingToast = toast.loading('Generating...', {
       duration: Infinity // 设置为无限时长，只有手动调用dismiss才会消失
     });
 
@@ -90,8 +90,12 @@ export function UploadPreviewCard({ onUpload, user, userBalance }: UploadPreview
 
       // 销毁加载中的toast
       toast.dismiss(loadingToast);
+      if (result.code === 403) {
+        toast.error(result.error || 'Insufficient boost pack balance. Please recharge.');
+        return;
+      }
       if (result.code !== 0) {
-        toast.error('上传失败，请重试');
+        toast.error('Upload fail, please try again');
         return;
       }
 
@@ -99,13 +103,13 @@ export function UploadPreviewCard({ onUpload, user, userBalance }: UploadPreview
       if (result && result.img) {
         setResultImage(result.img);
       }
-      toast.success('成功');
+      toast.success('Success');
 
     } catch (error) {
       console.error('Error uploading file:', error);
       // 销毁加载中的toast，显示错误提示
       toast.dismiss(loadingToast);
-      toast.error('上传失败，请重试');
+      toast.error('Upload fail, please try again');
     } finally {
       // 无论成功还是失败，都将加载状态设置为false
       setIsLoading(false);

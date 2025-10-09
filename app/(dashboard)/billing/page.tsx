@@ -5,8 +5,8 @@ import { DashboardShell } from "@/components/dashboard/shell";
 import { subscribeInfo } from "@/components/subscribe/Subscribe";
 import { dashboardConfig } from "@/config/dashboard";
 import { MEMBERSHIP_ROLE_VALUE } from "@/lib/constants";
-import { getUserSubscriptionPlan } from "@/lib/lemonsqueezy/subscription";
 import { getCurrentUser } from "@/lib/session";
+import { getUserSubscriptionPlan } from "@/lib/user/user";
 import { SubScriptionInfo, UserSubscriptionPlan } from "@/types/subscribe";
 import { UserInfo } from "@/types/user";
 
@@ -34,8 +34,6 @@ export default async function BillingPage() {
     subscriptionId: "",
     membershipExpire: 0,
     customerId: "",
-    variantId: 0,
-    isCanceled: true,
     updatePaymentMethodURL: "",
   };
   if (subscription) {
@@ -50,8 +48,6 @@ export default async function BillingPage() {
       subscriptionId: subscription.subscriptionId,
       membershipExpire: subscription.membershipExpire,
       customerId: subscription.customerId,
-      variantId: subscription.variantId,
-      isCanceled: subscription.isCanceled,
       updatePaymentMethodURL: subscription.updatePaymentMethodURL,
     };
   }

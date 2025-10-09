@@ -12,22 +12,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { axios } from "@/lib/axios";
 import { cn } from "@/lib/utils";
-import { Res } from "@/types/request";
 import { UserSubscriptionPlan } from "@/types/subscribe";
 import { UserInfo } from "@/types/user";
 import dayjs from "dayjs";
@@ -58,39 +45,6 @@ export function BillingForm({
     setIsLoading(!isLoading);
     window.location.href = "/#subscription-card";
   }
-  async function cancelSubscription() {
-    console.log("cancel subscription", subscriptionPlan);
-    if (!subscriptionPlan) {
-      toast.error("subscriptionId not found");
-      return;
-    }
-    if (!subscriptionPlan.subscriptionId) {
-      toast.error("subscriptionId not found");
-      return;
-    }
-    if (!subscriptionPlan.isPro) {
-      toast.error("you don't have a subscription");
-      return;
-    }
-    if (subscriptionPlan.isCanceled) {
-      toast.error("subscription already canceled");
-      return;
-    }
-    try {
-      const res = await axios.delete<any, Res>("/api/payment/subscribe", {
-        headers: {
-          token: user.accessToken,
-        },
-      });
-      if (res.code === 200) {
-        router.replace("");
-        return;
-      }
-      toast.error("something wrong");
-    } catch (err) {
-      console.log(err);
-    }
-  }
 
   return (
     <div className={cn(className)}>
@@ -120,38 +74,11 @@ export function BillingForm({
                 Upgrade to PRO
               </Button>
             )}
-            {subscriptionPlan.isCanceled ? (
-              <></>
-            ) : (
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button variant="destructive">Unsubscribe</Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>
-                      Are you absolutely sure?
-                    </AlertDialogTitle>
-                    <AlertDialogDescription>
-                      After unsubscribing, you will lose your current privileges
-                      once your current subscription expires.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Close Dialog</AlertDialogCancel>
-                    <AlertDialogAction onClick={cancelSubscription}>
-                      Unsubscribe
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-            )}
+
           </div>
           {subscriptionPlan.isPro ? (
             <p className="rounded-full text-xs font-medium">
-              {subscriptionPlan.isCanceled
-                ? "Your plan will be canceled on "
-                : "Your plan renews on "}
+              "Your plan renews on "
               {dayjs(subscriptionPlan.membershipExpire).format(
                 "YYYY-MM-DD HH:mm"
               )}

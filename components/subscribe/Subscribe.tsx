@@ -1,14 +1,15 @@
 import SubscribeCard from "@/components/subscribe/SubscribeCard";
-import { axios } from "@/lib/axios";
 import {
   BOOST_PACK_CREDITS,
-  BOOST_PACK_EXPIRE,
-  SINGLE_VARIANT_KEY,
-  SUBSCRIPTION_VARIANT_KEY,
+  BOOST_PACK_EXPIRE
 } from "@/lib/constants";
-import { CreateCheckoutResponse, SubscribeInfo } from "@/types/subscribe";
+import { SubscribeInfo } from "@/types/subscribe";
 import { UserInfo } from "@/types/user";
+import { loadStripe } from "@stripe/stripe-js";
 import { toast } from "react-hot-toast";
+
+// 初始化 Stripe Promise
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
 export const subscribeInfo: SubscribeInfo = {
   free: {
@@ -17,8 +18,7 @@ export const subscribeInfo: SubscribeInfo = {
     amount: 0,
     expireType: "day",
     possess: [
-      `${
-        process.env.NEXT_PUBLIC_COMMON_USER_DAILY_LIMIT_STR || "10"
+      `${process.env.NEXT_PUBLIC_COMMON_USER_DAILY_LIMIT_STR || "10"
       } free credits per day`,
       "Optional credits purchase",
     ],
@@ -45,8 +45,7 @@ export const subscribeInfo: SubscribeInfo = {
     // expireType: "",
     possess: [
       "One-off buy",
-      `${BOOST_PACK_CREDITS || "100"} credits ${
-        BOOST_PACK_EXPIRE / 3600 / 24
+      `${BOOST_PACK_CREDITS || "100"} credits ${BOOST_PACK_EXPIRE / 3600 / 24
       }-day validity`,
       "No auto-renewal after expiry",
     ],
@@ -58,54 +57,56 @@ export default function Subscribe({ user }: { user: UserInfo | null }) {
   const getStartFreeVersion = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
-  const subscribe = async () => {
+
+  // 处理购买逻辑的函数
+  async function handleBuy(productId: number) {
     if (!user || !user.userId) {
       toast.error("Please login first");
       return;
     }
+    console.log("productId", productId);
     try {
-      const { checkoutURL } = await axios.post<any, CreateCheckoutResponse>(
-        "/api/payment/subscribe",
-        {
-          userId: user.userId,
-          type: SUBSCRIPTION_VARIANT_KEY,
+      // 1. 调用后端API创建订阅会话
+      const response = await fetch('/api/stripe/subscribe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-        {
-          headers: {
-            token: user.accessToken,
-          },
-        }
-      );
-      window.location.href = checkoutURL;
-      // window.open(checkoutURL, "_blank", "noopener, noreferrer");
-    } catch (err) {
-      console.log(err);
+        body: JSON.stringify({ "productId": productId }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log('订阅请求响应数据:', data);
+
+      // 2. 获取Stripe实例
+      const stripe = await stripePromise;
+      if (!stripe) {
+        throw new Error('Stripe加载失败');
+      }
+
+      if (data.sessionId) {
+        // 使用 Stripe 的 redirectToCheckout 方法重定向到结账页面
+        const { error } = await stripe.redirectToCheckout({
+          sessionId: data.sessionId
+        });
+      } else {
+        // 5. 显示API返回的数据
+        console.log('没有sessionId，返回数据:', data);
+        toast.error('Subscription initiation failed. Please try again.');
+      }
+
+    } catch (error) {
+      console.error('订阅请求失败:', error);
     }
-  };
-  const purchase = async () => {
-    if (!user || !user.userId) {
-      toast.error("Please login first");
-      return;
-    }
-    console.log("purchase");
-    try {
-      const { checkoutURL } = await axios.post<any, CreateCheckoutResponse>(
-        "/api/payment/subscribe",
-        {
-          userId: user.userId,
-          type: SINGLE_VARIANT_KEY,
-        },
-        {
-          headers: {
-            token: user.accessToken,
-          },
-        }
-      );
-      window.location.href = checkoutURL;
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  }
+
+  // 创建专门的处理函数，用于不同产品
+  const buyMembership = () => handleBuy(2);
+  const buyBoostPack = () => handleBuy(1);
 
   return (
     <div>
@@ -122,21 +123,17 @@ export default function Subscribe({ user }: { user: UserInfo | null }) {
             <SubscribeCard
               id="subscription-card"
               info={subscribeInfo.membership}
-              clickButton={subscribe}
+              clickButton={buyMembership}
             />
             <SubscribeCard
               id="bootsPack-card"
               info={subscribeInfo.boostPack}
-              clickButton={purchase}
+              clickButton={buyBoostPack}
             />
           </div>
         </div>
       </section>
-      {/* <Toaster
-        position="top-center"
-        reverseOrder={false}
-        toastOptions={{ duration: 2000 }}
-      /> */}
+
     </div>
   );
 }

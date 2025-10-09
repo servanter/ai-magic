@@ -1,7 +1,7 @@
 import { imageConfigs } from "@/config/imageConfig";
 import { editImageWithPrompt } from "@/lib/aliyun/aliyun";
 import { getCurrentUser } from "@/lib/session";
-import { decrementBoostPack } from "@/lib/usage/usage";
+import { checkStatus, decrementBoostPack } from "@/lib/usage/usage";
 import { UserInfo } from "@/types/user";
 import { IncomingForm } from 'formidable';
 import fs from 'fs/promises';
@@ -79,6 +79,12 @@ export async function POST(request: Request) {
     const fileContent = await fs.readFile(file.filepath);
     const base64Image = `data:${file.mimetype};base64,${fileContent.toString('base64')}`;
 
+
+    const usage = await checkStatus({ userId: user.userId });
+    console.log('User usage info:', usage);
+    if (usage.boostPackRemaining <= 0) {
+      return NextResponse.json({ error: 'Insufficient boost pack balance. Please recharge.', status: 403, code: 403 });
+    }
 
     let imageUrl = await editImageWithPrompt(prompt, base64Image);
 
