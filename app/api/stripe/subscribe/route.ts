@@ -4,8 +4,8 @@ import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 
 // 初始化 Stripe 客户端
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
-console.log('STRIPE_SECRET_KEY==========', process.env.STRIPE_SECRET_KEY);
+const stripe = new Stripe(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY as string);
+console.log('STRIPE_SECRET_KEY==========', process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY);
 
 /**
  * 创建 Stripe 结账会话
@@ -15,7 +15,7 @@ console.log('STRIPE_SECRET_KEY==========', process.env.STRIPE_SECRET_KEY);
  * @returns Stripe 结账会话
  */
 async function createSingleCheckoutSession(userId: string, productId: number, productName: string) {
-  console.log('STRIPE_SECRET_KEY==========', process.env.STRIPE_SECRET_KEY);
+  console.log('STRIPE_SECRET_KEY==========', process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY);
   return await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
     line_items: [{
@@ -80,7 +80,7 @@ async function createMonthlyCheckoutSession(userId: string, productId: number, p
 export async function POST(request: NextRequest) {
   try {
     const { productId } = await request.json();
-console.log('STRIPE_SECRET_KEYaaaaaaa==========', process.env.STRIPE_SECRET_KEY);
+console.log('STRIPE_SECRET_KEYaaaaaaa==========', process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY);
     let productName = 'Boost Payment';
     if (productId === 2) {
       productName = 'Member Payment';
