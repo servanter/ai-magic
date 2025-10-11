@@ -5,7 +5,7 @@ import { clearTodayUsage } from '@/lib/usage/usage';
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+const stripe = new Stripe(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY!);
 
 export async function POST(request: Request) {
   const body = await request.text();
@@ -41,7 +41,7 @@ export async function POST(request: Request) {
         where: { userId: userId.toString() },
         select: { userId: true, email: true, username: true },
       });
-      if (productId && productId === '1' && userId && userId.length > 0) {
+      if (productId && productId === 'prod_T8SB2KQsiFVbHs' && userId && userId.length > 0) {
         singlePayDeal(userId, paymentIntent.id)
       }
       if (!user) return NextResponse.json({ message: "Your account was not found" }, { status: 401 });
