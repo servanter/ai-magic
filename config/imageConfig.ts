@@ -24,5 +24,8 @@ Keep era features (e.g., B&W contrast, vintage vignetting) without losing histor
 2. **Background Requirements**：Solid blue background (color reference #0066CC), no noise, gradients, shadows or textures, with clear boundaries between the background edge and the person’s outline;
 3. **Portrait Shooting Standards**：The person is photographed front-facing, with the head accounting for 1/2 of the frame, looking straight at the camera with a natural expression (no exaggerated movements/expressions); formal clothing or light-colored tops are recommended (to avoid blending with the blue background);
 4. **Image Quality Adaptation**：No noise or grain in the image, even exposure on the person’s face (no local overexposure/underexposure), no obstructions (e.g., hair covering eyes/eyebrows, accessories blocking the face), suitable for official scenarios such as ID cards, resumes, and visas.` },
+  {
+    href: "/demo8.jpeg", name: "Miniature Figurine", type: 8, prompt: `Please generate a realistic scene based on the uploaded image: a computer monitor displays 3D modeling software (showing a digital model consistent with the physical figurine); in front of the monitor, a highly detailed and lifelike physical figurine is placed on a clear acrylic base; beside the figurine, there is a product box or magazine featuring the same figurine in colorful imagery; the scene includes a keyboard, a mouse, and a wooden desk surface, lit by soft natural light, with all elements in sharp focus to highlight the workflow from digital design to the finished collectible.`
+  },
 
 ];
