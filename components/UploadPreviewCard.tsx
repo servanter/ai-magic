@@ -171,7 +171,7 @@ export function UploadPreviewCard({ onUpload, user, userBalance }: UploadPreview
             <div className="border-b border-gray-200 w-full"></div>
           </div>
 
-          <div className="flex gap-4 mt-2 max-w-full">
+          <div className="flex flex-wrap gap-4 mt-2 max-w-full">
             {imageConfigs.map((image, index) => (
               <div
                 key={index}

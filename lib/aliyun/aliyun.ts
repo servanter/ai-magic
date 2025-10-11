@@ -136,6 +136,8 @@ export async function editImageWithPrompt(prompt: string, imageBase64: string): 
     }
   };
 
+
+
   console.log('prompt:', prompt)
   console.log('调用 DashScope 图像编辑 API，参数:', { ...data, input: { messages: [{ role: 'user', content: [{ image: '(base64图像已省略)', text: prompt }] }] } });
 
