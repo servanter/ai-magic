@@ -1,5 +1,6 @@
 import { ONE_DAY } from "@/lib/constants";
 import prisma from "@/lib/prisma";
+import { boostPack } from "@/lib/upgrade/upgrade";
 import { getUserSubscriptionStatus } from "@/lib/user/user";
 import { UserInfo } from "@/types/user";
 import { Account, NextAuthOptions, TokenSet } from "next-auth";
@@ -40,6 +41,8 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, account }) {
       // 登录(account仅登录那一次有值)
       // Only on sign in (account only has a value at that time)
+      console.log('JWT callback - account:', account);
+      console.log('JWT callback - token:', token);
       if (account) {
         token.accessToken = account.access_token
 
@@ -47,11 +50,19 @@ export const authOptions: NextAuthOptions = {
         // Store the access token
         await storeAccessToken(account.access_token || '', token.sub);
 
+        // 先查询是否存在该用户，用于判断首次注册
+        const existing = await prisma.user.findUnique({ where: { userId: token.sub as string } });
+        console.log('Existing user:', existing);
+
         // 用户信息存入数据库
         // Save user information in the database
         const userInfo = await upsertUserAndGetInfo(token, account);
         if (!userInfo || !userInfo.userId) {
           throw new Error('User information could not be saved or retrieved.');
+        }
+        if (!existing) {
+          const userId = userInfo.userId;
+          await boostPack({ userId: userId });
         }
 
         const planRes = await getUserSubscriptionStatus({ userId: userInfo.userId, defaultUser: userInfo })
