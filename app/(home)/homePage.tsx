@@ -89,7 +89,6 @@ export default function HomePage({
       </h1>
 
       {/* 上传预览组件 */}
-
       <UploadPreviewCard user={user} userBalance={userBalance} />
 
       {/* 用户评价轮播图 */}

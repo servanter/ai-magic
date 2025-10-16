@@ -131,7 +131,7 @@ export function UploadPreviewCard({ onUpload, user, userBalance }: UploadPreview
   return (
     <div className="flex flex-col gap-6 p-6 bg-white rounded-lg shadow-lg mt-6 w-[1200px]">
       {/* 组件标题 */}
-      <h2 className="text-xl font-semibold text-gray-800 text-left">AI IMAGE</h2>
+      <h2 id="feature-aimage" className="text-xl font-semibold text-gray-800 text-left">AIMAGE</h2>
 
       {/* 内容区域 */}
       <div className="flex gap-6 min-h-0">
@@ -171,18 +171,18 @@ export function UploadPreviewCard({ onUpload, user, userBalance }: UploadPreview
             <div className="border-b border-gray-200 w-full"></div>
           </div>
 
-          <div className="flex flex-wrap gap-4 mt-2 max-w-full">
+          <div className="flex flex-wrap gap-4 mt-2 max-w-full z-0">
             {imageConfigs.map((image, index) => (
               <div
                 key={index}
-                className={`flex-shrink-0 w-24 h-24 rounded-lg overflow-hidden cursor-pointer transition-transform hover:scale-105 relative z-10 ${selectedImageIndex === index ? 'ring-2 ring-blue-500' : ''}`}
+                className={`flex-shrink-0 w-24 h-24 rounded-lg overflow-hidden cursor-pointer transition-transform relative z-0 ${selectedImageIndex === index ? 'ring-2 ring-blue-500' : ''}`}
                 onClick={() => setSelectedImageIndex(index)}
               >
                 <img
                   src={image.href}
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
+                <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center z-0">
                   <div className="p-1 text-white text-xs bg-slate-500 rounded-sm">
                     {image.name}
                   </div>

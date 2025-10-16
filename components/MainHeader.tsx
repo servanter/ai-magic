@@ -12,7 +12,7 @@ export default function MainHeader() {
         height={32}
       />
       <span className="sm:text-4xl text-2xl ml-2 tracking-tight font-extralight flex items-center">
-        AI Image Generator
+        AImage
       </span>
     </Link>
   );
