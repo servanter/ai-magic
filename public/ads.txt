@@ -1,6 +1,0 @@
-# ads.txt - Authorized Digital Sellers
-# 将本文件放在 Next.js 项目的 public 目录即可通过 /ads.txt 访问
-# 示例（请替换为你的真实条目）：
-# google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0
-# another-ad-network.com, 123456, RESELLER
-

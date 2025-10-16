@@ -129,9 +129,9 @@ export function UploadPreviewCard({ onUpload, user, userBalance }: UploadPreview
 
 
   return (
-    <div className="flex flex-col gap-6 p-6 bg-white rounded-lg shadow-lg mt-6 w-[1200px]">
+    <div className="flex flex-col gap-6 p-6 bg-white rounded-lg shadow-lg border-t border-b border-gray-200 w-[1200px] mt-10">
       {/* 组件标题 */}
-      <h2 id="feature-aimage" className="text-xl font-semibold text-gray-800 text-left">AIMAGE</h2>
+      <h2 id="try-it-now" className="text-xl font-semibold text-gray-800 text-left">AIMAGE</h2>
 
       {/* 内容区域 */}
       <div className="flex gap-6 min-h-0">
