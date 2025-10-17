@@ -15,7 +15,7 @@ export default function Header({ user }: { user?: UserInfo }) {
           <MainHeader />
           <nav className="hidden sm:flex items-center pl-8 gap-8 text-lg text-zinc-700">
             <a href="/" className="hover:text-blue-500">Home</a>
-            <a href="/#try-it-now" className="hover:text-blue-500">Try it now</a>
+            <a href="/#try-it-now" className="hover:text-blue-500">Try it now🔥</a>
             <a href="/#features" className="hover:text-blue-500">Features</a>
             <a href="/" className="hover:text-blue-500">Use Cases</a>
             <a href="/#upgrade" className="hover:text-blue-500">Pricing</a>
