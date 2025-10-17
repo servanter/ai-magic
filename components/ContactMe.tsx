@@ -7,12 +7,12 @@ import { SiBuymeacoffee } from "react-icons/si";
 
 const ContactMe = () => {
   return (
-    <div className="mx-auto flex flex-row items-center">
+    <div className="flex flex-row items-center">
       <Link
         href="mailto:zhy19890221@gmail.com"
         target="_blank"
         rel="noopener norefferer nofollow"
-        className="mx-3 flex max-w-[24px] flex-col items-center justify-center"
+        className="mr-3 flex max-w-[24px] flex-col items-center justify-center"
       >
         <MdEmail className="text-lg" />
       </Link>

@@ -1,12 +1,11 @@
 "use client";
 
 import { LanguageType } from "@/components/DropDown";
-import Github from "@/components/icons/GitHub";
-import Twitter from "@/components/icons/Twitter";
+import Features from "@/components/Features";
+import HowToUse from "@/components/HowToUse";
 import Subscribe from "@/components/subscribe/Subscribe";
 import TestimonialCarousel from "@/components/testimonials/TestimonialCarousel";
 import { UploadPreviewCard } from "@/components/UploadPreviewCard";
-import { siteConfig } from "@/config/site";
 import { UserInfo } from "@/types/user";
 import { useEffect, useRef, useState } from "react";
 import { Toaster } from "react-hot-toast";
@@ -60,36 +59,19 @@ export default function HomePage({
 
   return (
     <>
-
-      <div
-        className="mx-auto mt-6 flex items-center justify-center space-x-5"
-        style={{ animationDelay: "0.3s", animationFillMode: "forwards" }}
-      >
-        <a
-          href="https://x.com/hongyanzha38268"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex max-w-fit items-center justify-center space-x-2 rounded-full border border-gray-300 bg-white px-4 py-2 text-sm text-gray-600 shadow-md transition-colors hover:bg-blue-200 mb-5"
-        >
-          <Twitter className="h-5 w-5" />
-          <p className="text-sm font-semibold">Follow Me</p>
-        </a>
-        <a
-          href="https://github.com/servanter"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex max-w-fit items-center justify-center space-x-2 rounded-full border border-gray-300 bg-white px-4 py-2 text-sm text-gray-600 shadow-md transition-colors hover:bg-gray-100 mb-5"
-        >
-          <Github className="h-5 w-5" />
-          <p className="text-sm font-semibold">Star on GitHub</p>
-        </a>
-      </div>
-      <h1 className="sm:text-6xl text-4xl max-w-[858px] font-bold text-slate-900">
-        {siteConfig.description}
+      <h1 className="text-6xl font-bold mt-20">
+        <span className="custom-underline relative">AImage</span>
       </h1>
 
-      {/* 上传预览组件 */}
+      <div className="mx-auto mb-[1.275rem] w-full max-w-[580px] text-lg tracking-[-0.2px] dark:text-gray-500 mt-8">
+        <div className="relative mx-auto flex max-w-fit items-center justify-center rounded-[1.25rem] font-medium bg-transparent !important transition-shadow duration-500 overflow-hidden cursor-pointer">
+          <div className="relative z-2 text-transparent bg-gradient-to-r from-[#40ffa2] via-[#4079ff] to-[#40ffa2] bg-[size:300%_100%] bg-clip-text animate-gradient">
+            Generate image in seconds with AI — free, no sign-up required!
+          </div>
+        </div>
+      </div>
 
+      {/* 上传预览组件 */}
       <UploadPreviewCard user={user} userBalance={userBalance} />
 
       {/* 用户评价轮播图 */}
@@ -102,7 +84,10 @@ export default function HomePage({
       />
       <hr className="h-px bg-gray-700 border-1" />
 
-      {/* subscribe */}
+      <Features />
+
+      <HowToUse />
+
       <Subscribe user={user} />
     </>
   );

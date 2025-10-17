@@ -2,9 +2,37 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  @keyframes gradientMove {
+    0% {
+      background-position: 0% 50%;
+    }
+
+    50% {
+      background-position: 100% 50%;
+    }
+
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  .animate-gradient {
+    animation: gradientMove 3s ease infinite;
+  }
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('/fonts/Satoshi-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 @layer base {
   :root {
-    --background: 240 10% 96%;
+
     --foreground: 222.2 84% 4.9%;
 
     --card: 0 0% 100%;
@@ -64,6 +92,22 @@
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
   }
+
+  .custom-underline::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    /* 下划线与文字底部的间距 */
+    height: 3px;
+    /* 下划线的最大高度（左侧最粗处） */
+    width: 100%;
+    /* 下划线宽度（与文字等宽） */
+    /* 线性渐变：从左到右，前70%保持紫色，后30%渐变透明（实现“从粗到细”） */
+    background: linear-gradient(to right, #6366f1, #6366f1 70%, transparent);
+    border-radius: 2px;
+    /* 两端圆角，营造弧度感 */
+  }
 }
 
 @layer base {
@@ -72,6 +116,7 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
+    font-family: 'Satoshi', sans-serif;
   }
 }

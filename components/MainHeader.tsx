@@ -6,13 +6,13 @@ export default function MainHeader() {
     <Link href="/" className="flex space-x-3">
       <Image
         alt="header text"
-        src="/logo3.jpeg"
+        src="/logo.png"
         className="sm:w-12 sm:h-12 w-8 h-8"
         width={32}
         height={32}
       />
       <span className="sm:text-4xl text-2xl ml-2 tracking-tight font-extralight flex items-center">
-        AI Image Generator
+        AImage
       </span>
     </Link>
   );

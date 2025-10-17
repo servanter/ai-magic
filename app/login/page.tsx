@@ -36,7 +36,7 @@ export default async function LoginPage() {
         <p className="px-8 text-center text-sm text-muted-foreground">
           By clicking continue, you agree to our{" "}
           <Link
-            href="/privacy"
+            href="/privacy-policy"
             className="hover:text-brand underline underline-offset-4"
           >
             Privacy Policy
