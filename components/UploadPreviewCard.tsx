@@ -12,12 +12,13 @@ interface UploadPreviewCardProps {
   onUpload?: (file: File) => void;
   user: UserInfo | null;
   userBalance?: UserBalance | null;
+  selectedImageIndex?: number;
 }
 
-export function UploadPreviewCard({ onUpload, user, userBalance }: UploadPreviewCardProps) {
+export function UploadPreviewCard({ onUpload, user, userBalance, selectedImageIndex = 0 }: UploadPreviewCardProps) {
   const [preview, setPreview] = useState<string | null>(null);
-  const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0); // 默认选择第一张图片
   const [currentUses, setCurrentUses] = useState(0);
+  const [selectedIndex, setSelectedImageIndex] = useState<number>(selectedImageIndex);
   const [remainingCredits, setRemainingCredits] = useState(0);
   const [boostPackRemainingCredits, setBoostPackRemainingCredits] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -66,7 +67,7 @@ export function UploadPreviewCard({ onUpload, user, userBalance }: UploadPreview
 
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('type', imageConfigs[selectedImageIndex].type.toString());
+    formData.append('type', imageConfigs[selectedIndex].type.toString());
 
     // 显示加载中的toast提示，设置为永久显示直到手动关闭
     const loadingToast = toast.loading('Generating...', {
@@ -130,15 +131,13 @@ export function UploadPreviewCard({ onUpload, user, userBalance }: UploadPreview
 
   return (
     <div className="flex flex-col gap-6 p-6 bg-white rounded-lg shadow-lg border-t border-b border-gray-200 w-[1200px] mt-10">
-      {/* 组件标题 */}
-      <h2 id="try-it-now" className="text-xl font-semibold text-gray-800 text-left">AIMAGE</h2>
 
       {/* 内容区域 */}
       <div className="flex gap-6 min-h-0">
         {/* 左侧上传区域 */}
         <div className="w-1/2 flex flex-col gap-4 min-h-0">
           <div className="flex flex-col gap-2">
-            <h3 className="text-sm font-medium text-gray-600 text-left">Upload Area</h3>
+            <h3 className="text-sm font-medium text-gray-600 text-left">Upload</h3>
             <div className="border-b border-gray-200 w-full"></div>
           </div>
 
@@ -175,7 +174,7 @@ export function UploadPreviewCard({ onUpload, user, userBalance }: UploadPreview
             {imageConfigs.map((image, index) => (
               <div
                 key={index}
-                className={`flex-shrink-0 w-24 h-24 rounded-lg overflow-hidden cursor-pointer transition-transform relative z-0 ${selectedImageIndex === index ? 'ring-2 ring-blue-500' : ''}`}
+                className={`flex-shrink-0 w-24 h-24 rounded-lg overflow-hidden cursor-pointer transition-transform relative z-0 ${selectedIndex === index ? 'ring-2 ring-purple-500' : ''}`}
                 onClick={() => setSelectedImageIndex(index)}
               >
                 <img
@@ -251,8 +250,8 @@ export function UploadPreviewCard({ onUpload, user, userBalance }: UploadPreview
               />
             ) : (
               <img
-                src={imageConfigs[selectedImageIndex].href}
-                alt={imageConfigs[selectedImageIndex].name}
+                src={imageConfigs[selectedIndex].href}
+                alt={imageConfigs[selectedIndex].name}
                 className="max-w-[100%] object-contain p-1 rounded-lg"
               />
             )}
