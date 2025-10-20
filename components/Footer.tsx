@@ -1,4 +1,5 @@
 import ContactMe from "@/components/ContactMe";
+import { imageConfigs } from "@/config/imageConfig";
 import Link from "next/link";
 
 const Footer = () => {
@@ -29,6 +30,20 @@ const Footer = () => {
               <Link href="#" className="text-gray-300 hover:text-pink-400 transition-colors">
                 Use Cases
               </Link>
+            </div>
+
+            {/* Tools Column */}
+            <div className="flex flex-col space-y-2">
+              <h3 className="text-white font-bold">Free Tools</h3>
+              {imageConfigs.map((config) => (
+                <Link
+                  key={config.name}
+                  href={`/${config.link}`}
+                  className="text-gray-300 hover:text-pink-400 transition-colors"
+                >
+                  {config.name}
+                </Link>
+              ))}
             </div>
 
             {/* Company Column */}
