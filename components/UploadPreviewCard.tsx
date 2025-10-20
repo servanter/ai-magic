@@ -204,7 +204,7 @@ export function UploadPreviewCard({ onUpload, user, userBalance }: UploadPreview
             <span className="">Member Expire Time：
               {userBalance && userBalance.membershipExpire
                 ? dayjs(userBalance.membershipExpire).format('YYYY-MM-DD HH:mm')
-                : '无'}
+                : ''}
             </span>
           </div>
 
