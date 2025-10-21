@@ -27,9 +27,9 @@ const Footer = () => {
               <Link href="/" className="text-gray-300 hover:text-pink-400 transition-colors">
                 AImage
               </Link>
-              <Link href="#" className="text-gray-300 hover:text-pink-400 transition-colors">
+              {/* <Link href="#" className="text-gray-300 hover:text-pink-400 transition-colors">
                 Use Cases
-              </Link>
+              </Link> */}
             </div>
 
             {/* Tools Column */}
