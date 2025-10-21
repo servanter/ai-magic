@@ -4,6 +4,7 @@ import { boostPack } from '@/lib/upgrade/upgrade';
 import { clearTodayUsage } from '@/lib/usage/usage';
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
+import prisma from "@/lib/prisma";
 
 const stripe = new Stripe(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY!);
 
