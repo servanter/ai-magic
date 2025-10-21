@@ -17,7 +17,7 @@ export default function Header({ user }: { user?: UserInfo }) {
             <a href="/" className="hover:text-blue-500">Home</a>
             <a href="/#try-it-now" className="hover:text-blue-500">Try it now</a>
             <a href="/#features" className="hover:text-blue-500">Features</a>
-            <a href="/" className="hover:text-blue-500">Use Cases</a>
+            {/* <a href="/" className="hover:text-blue-500">Use Cases</a> */}
             <a href="/#upgrade" className="hover:text-blue-500">Pricing</a>
           </nav>
         </div>
