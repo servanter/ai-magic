@@ -22,7 +22,10 @@ const Features = () => {
                   onClick={() => {
                     const element = document.getElementById('try-it-now');
                     if (element) {
-                      element.scrollIntoView({ behavior: 'smooth' });
+                      element.scrollIntoView({ 
+                        behavior: 'smooth',
+                        block: 'center'
+                      });
                     }
                   }}
                 >
@@ -95,7 +98,10 @@ const Features = () => {
                   onClick={() => {
                     const element = document.getElementById('try-it-now');
                     if (element) {
-                      element.scrollIntoView({ behavior: 'smooth' });
+                      element.scrollIntoView({ 
+                        behavior: 'smooth',
+                        block: 'center'
+                      });
                     }
                   }}
                 >
