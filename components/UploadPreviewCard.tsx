@@ -137,7 +137,7 @@ export function UploadPreviewCard({ onUpload, user, userBalance, selectedImageIn
         {/* 左侧上传区域 */}
         <div className="w-1/2 flex flex-col gap-4 min-h-0">
           <div className="flex flex-col gap-2">
-            <h3 className="text-sm font-medium text-gray-600 text-left">Upload</h3>
+            <h3 className="text-sm font-medium text-gray-600 text-left" id="try-it-now">Upload</h3>
             <div className="border-b border-gray-200 w-full"></div>
           </div>
 
