@@ -38,7 +38,7 @@ const Footer = () => {
               {imageConfigs.map((config) => (
                 <Link
                   key={config.name}
-                  href={`/${config.link}`}
+                  href={`/tools/${config.link}`}
                   className="text-gray-300 hover:text-pink-400 transition-colors"
                 >
                   {config.name}
@@ -49,16 +49,16 @@ const Footer = () => {
             {/* Company Column */}
             <div className="flex flex-col space-y-2">
               <h3 className="text-white font-bold">Company</h3>
-              <Link href="privacy-policy" className="text-gray-300 hover:text-pink-400 transition-colors">
+              <Link href="/privacy-policy" className="text-gray-300 hover:text-pink-400 transition-colors">
                 Privacy Policy
               </Link>
-              <Link href="terms-of-service" className="text-gray-300 hover:text-pink-400 transition-colors">
+              <Link href="/terms-of-service" className="text-gray-300 hover:text-pink-400 transition-colors">
                 Terms & Conditions
               </Link>
-              <Link href="about-us" className="text-gray-300 hover:text-pink-400  transition-colors">
+              <Link href="/about-us" className="text-gray-300 hover:text-pink-400  transition-colors">
                 About Us
               </Link>
-              <Link href="contact-us" className="text-gray-300 hover:text-pink-400 transition-colors">
+              <Link href="/contact-us" className="text-gray-300 hover:text-pink-400 transition-colors">
                 Contact Us
               </Link>
             </div>
