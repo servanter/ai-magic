@@ -107,7 +107,8 @@ export async function editImageWithPrompt(prompt: string, imageBase64: string): 
     throw new Error('DASHSCOPE_API_KEY 未配置');
   }
 
-  const url = 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation';
+  // const url = 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation';
+  const url = 'https://dashscope-intl.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation';
   const headers = {
     'Authorization': `Bearer ${apiKey}`,
     'Content-Type': 'application/json',
