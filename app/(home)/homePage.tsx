@@ -60,7 +60,7 @@ export default function HomePage({
   return (
     <>
       <h1 className="text-6xl font-bold mt-20">
-        <span className="custom-underline relative">AImage</span>
+        <span className="custom-underline relative">Free AI Image &amp; Avatar Generator</span>
       </h1>
 
       <div className="mx-auto mb-[1.275rem] w-full max-w-[580px] text-lg tracking-[-0.2px] dark:text-gray-500 mt-8">

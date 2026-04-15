@@ -1,17 +1,18 @@
 import { SiteConfig } from "@/types/siteConfig"
 
 const baseSiteConfig = {
-  name: "AI Image Avatar Generator",
+  name: "AImage",
+  title: "AImage - Free AI Image & Avatar Generator | Photo to Cartoon",
   description:
-    "Support uploading any photo to quickly generate cartoon avatars in various styles, meeting all social platforms’ avatar needs.",
-  url: "https://ai-magic-ten.vercel.app/",
-  ogImage: "https://ai-magic-ten.vercel.app/og.png",
-  metadataBase: new URL("https://ai-magic-ten.vercel.app"),
-  keywords: ["SmartExcel", "ChatGPT", "Excel formulas", "Excel AI", "文心一言", "智谱"],
+    "Generate stunning AI avatars and images for free. Upload any photo and instantly transform it into cartoon, anime, or artistic styles. Perfect for all social platforms.",
+  url: "https://www.aimage.top",
+  ogImage: "https://www.aimage.top/og.png",
+  metadataBase: new URL("https://www.aimage.top"),
+  keywords: ["AI image generator", "AI avatar generator", "photo to cartoon", "cartoon avatar", "anime avatar", "AI art", "image style transfer", "free AI image", "aimage", "AI photo editor"],
   authors: [
     {
       name: "servanter",
-      url: "https://ai-magic-ten.vercel.app",
+      url: "https://www.aimage.top",
     }
   ],
   creator: '@servanter',
@@ -33,13 +34,13 @@ export const siteConfig: SiteConfig = {
     type: "website",
     locale: "en_US",
     url: baseSiteConfig.url,
-    title: baseSiteConfig.name,
+    title: baseSiteConfig.title,
     description: baseSiteConfig.description,
     siteName: baseSiteConfig.name,
   },
   twitter: {
     card: "summary_large_image",
-    title: baseSiteConfig.name,
+    title: baseSiteConfig.title,
     description: baseSiteConfig.description,
     images: [`${baseSiteConfig.url}/og.png`],
     creator: baseSiteConfig.creator,

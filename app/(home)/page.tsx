@@ -38,13 +38,34 @@ export default async function Page() {
     : 0;
 
   return (
-    <HomePage
-      usage={usage}
-      user={user}
-      remaining={remaining}
-      boostPackRemaining={boostPackRemaining}
-      membershipExpire={membershipExpire}
-      boostPackExpire={boostPackExpire}
-    />
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": "AImage",
+            "url": "https://www.aimage.top",
+            "potentialAction": {
+              "@type": "SearchAction",
+              "target": {
+                "@type": "EntryPoint",
+                "urlTemplate": "https://www.aimage.top/tools/{search_term_string}"
+              },
+              "query-input": "required name=search_term_string"
+            }
+          })
+        }}
+      />
+      <HomePage
+        usage={usage}
+        user={user}
+        remaining={remaining}
+        boostPackRemaining={boostPackRemaining}
+        membershipExpire={membershipExpire}
+        boostPackExpire={boostPackExpire}
+      />
+    </>
   );
 }

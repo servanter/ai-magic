@@ -4,7 +4,7 @@
  * @see https://weijunext.com/article/979b9033-188c-4d88-bfff-6cf74d28420d
  */
 module.exports = {
-  siteUrl: "https://www.smartexcel.cc",
+  siteUrl: "https://www.aimage.top",
   changefreq: "daily",
   priority: 0.7,
   exclude: ["/server-sitemap.xml", "/404"],
@@ -25,7 +25,7 @@ module.exports = {
   ],
   robotsTxtOptions: {
     // additionalSitemaps: [
-    //   'https://www.smartexcel.cc/sitemap.xml',
+    //   'https://www.aimage.top/sitemap.xml',
     // ],
     policies: [
       {
