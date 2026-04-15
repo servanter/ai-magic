@@ -4,6 +4,7 @@ export type AuthorsConfig = {
 }
 export type SiteConfig = {
   name: string
+  title: string
   description: string
   url: string
   keywords: string[]
