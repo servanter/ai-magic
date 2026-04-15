@@ -36,6 +36,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     "contact-us": "Contact Us",
     "privacy-policy": "Privacy Policy",
     "terms-of-service": "Terms of Service",
+    "faq": "Frequently Asked Questions",
   };
   const title = titleMap[slug] || slug;
   return {
