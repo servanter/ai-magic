@@ -1,6 +1,9 @@
 # *
 User-agent: *
 Allow: /
+Disallow: /api/
+Disallow: /dashboard/
+Disallow: /billing/
 
 # AhrefsBot
 User-agent: AhrefsBot
@@ -19,7 +22,7 @@ User-agent: DotBot
 Disallow: /
 
 # Host
-Host: https://www.smartexcel.cc
+Host: https://www.aimage.top
 
 # Sitemaps
-Sitemap: https://www.smartexcel.cc/sitemap.xml
+Sitemap: https://www.aimage.top/sitemap.xml

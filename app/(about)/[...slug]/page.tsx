@@ -1,5 +1,6 @@
 import { allPosts } from "contentlayer/generated";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 
 import { Mdx } from "@/components/mdx/mdx-components";
 
@@ -26,6 +27,23 @@ export async function generateStaticParams(): Promise<PageProps["params"][]> {
   return allPosts.map((page) => ({
     slug: page.slugAsParams?.split("/"),
   }));
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const slug = params.slug?.join("/") || "";
+  const titleMap: Record<string, string> = {
+    "about-us": "About Us",
+    "contact-us": "Contact Us",
+    "privacy-policy": "Privacy Policy",
+    "terms-of-service": "Terms of Service",
+  };
+  const title = titleMap[slug] || slug;
+  return {
+    title,
+    alternates: {
+      canonical: `https://www.aimage.top/${slug}`,
+    },
+  };
 }
 
 export default async function PagePage({ params }: PageProps) {

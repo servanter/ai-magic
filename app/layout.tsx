@@ -26,19 +26,39 @@ export const fontSans = FontSans({
 });
 
 export const metadata = {
-  title: siteConfig.name,
+  metadataBase: siteConfig.metadataBase,
+  title: {
+    default: siteConfig.title,
+    template: `%s | AImage`,
+  },
   description: siteConfig.description,
   keywords: siteConfig.keywords,
   authors: siteConfig.authors,
   creator: siteConfig.creator,
   themeColor: siteConfig.themeColor,
   icons: siteConfig.icons,
-  metadataBase: siteConfig.metadataBase,
-  openGraph: siteConfig.openGraph,
-  twitter: siteConfig.twitter,
+  openGraph: {
+    ...siteConfig.openGraph,
+    images: [
+      {
+        url: "https://www.aimage.top/og.png",
+        width: 1200,
+        height: 630,
+        alt: "AImage - AI Image & Avatar Generator",
+      },
+    ],
+  },
+  twitter: {
+    ...siteConfig.twitter,
+    images: ["https://www.aimage.top/og.png"],
+  },
   alternates: {
-    canonical: '/'
-  }
+    canonical: "https://www.aimage.top",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default async function RootLayout({
@@ -61,6 +81,30 @@ export default async function RootLayout({
           fontHeading.variable
         )}
       >
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebApplication",
+              "name": "AImage",
+              "url": "https://www.aimage.top",
+              "description": "Generate stunning AI avatars and images for free. Upload any photo and instantly transform it into cartoon, anime, or artistic styles.",
+              "applicationCategory": "MultimediaApplication",
+              "operatingSystem": "Web",
+              "offers": {
+                "@type": "Offer",
+                "price": "0",
+                "priceCurrency": "USD"
+              },
+              "publisher": {
+                "@type": "Organization",
+                "name": "AImage",
+                "url": "https://www.aimage.top"
+              }
+            })
+          }}
+        />
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <NextAuthProvider>
             <Header user={user} />

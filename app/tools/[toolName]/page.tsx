@@ -1,4 +1,5 @@
 
+import type { Metadata } from "next";
 import ImageComparisonSlider from "@/components/ImageComparisonSlider";
 import UploadPreviewSection from "@/components/UploadPreviewSection";
 import { imageConfigs } from "@/config/imageConfig";
@@ -10,6 +11,25 @@ import { notFound } from "next/navigation";
 interface ToolPageProps {
   params: {
     toolName: string;
+  };
+}
+
+export async function generateMetadata({ params }: ToolPageProps): Promise<Metadata> {
+  const toolDisplayName = params.toolName
+    .split("-")
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+  return {
+    title: `${toolDisplayName} - AI Image Tool`,
+    description: `Use ${toolDisplayName} to generate stunning AI images and avatars. Free online AI image tool powered by AImage.`,
+    alternates: {
+      canonical: `https://www.aimage.top/tools/${params.toolName}`,
+    },
+    openGraph: {
+      title: `${toolDisplayName} - AI Image Tool | AImage`,
+      description: `Use ${toolDisplayName} to generate stunning AI images and avatars.`,
+      url: `https://www.aimage.top/tools/${params.toolName}`,
+    },
   };
 }
 
@@ -68,7 +88,12 @@ export default async function ToolPage({ params }: ToolPageProps) {
       <div className="flex max-full mx-auto flex-col justify-center py-0 px-4">
         <div className="flex flex-1 w-full flex-col items-center justify-center text-center">
           <h1 className="text-6xl font-bold mt-20">
-            <span className="custom-underline relative">AImage</span>
+            <span className="custom-underline relative">
+              {params.toolName
+                .split("-")
+                .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+                .join(" ")}
+            </span>
           </h1>
 
           <div className="mx-auto mb-[1.275rem] w-full max-w-[580px] text-lg tracking-[-0.2px] dark:text-gray-500 mt-8">
