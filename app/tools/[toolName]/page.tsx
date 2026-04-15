@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import ImageComparisonSlider from "@/components/ImageComparisonSlider";
 import UploadPreviewSection from "@/components/UploadPreviewSection";
 import { imageConfigs } from "@/config/imageConfig";
+import { toolContentMap } from "@/config/toolContent";
 import { getCurrentUser } from "@/lib/session";
 import { checkStatus, getUsage } from "@/lib/usage/usage";
 import { UserInfo } from "@/types/user";
@@ -83,16 +84,20 @@ export default async function ToolPage({ params }: ToolPageProps) {
     boostPackExpire,
   };
 
+  const toolContent = toolContentMap[params.toolName];
+
+  const toolDisplayName = params.toolName
+    .split("-")
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+
   return (
     <>
       <div className="flex max-full mx-auto flex-col justify-center py-0 px-4">
         <div className="flex flex-1 w-full flex-col items-center justify-center text-center">
           <h1 className="text-6xl font-bold mt-20">
             <span className="custom-underline relative">
-              {params.toolName
-                .split("-")
-                .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-                .join(" ")}
+              {toolDisplayName}
             </span>
           </h1>
 
@@ -109,10 +114,51 @@ export default async function ToolPage({ params }: ToolPageProps) {
 
           <UploadPreviewSection user={user} userBalance={userBalance} selectedImageIndex={config.type - 1} />
 
-
         </div>
       </div>
 
+      {toolContent && (
+        <div className="max-w-4xl mx-auto px-4 py-16 space-y-16">
+          {/* How It Works */}
+          <section>
+            <h2 className="text-3xl font-bold mb-8 text-center">
+              How {toolDisplayName} Works
+            </h2>
+            <ol className="space-y-4">
+              {toolContent.howItWorks.map((step, index) => (
+                <li key={index} className="flex gap-4 items-start">
+                  <span className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-[#40ffa2] to-[#4079ff] text-white text-sm font-bold flex items-center justify-center">
+                    {index + 1}
+                  </span>
+                  <p className="text-gray-600 dark:text-gray-400 leading-relaxed pt-1">
+                    {step}
+                  </p>
+                </li>
+              ))}
+            </ol>
+          </section>
+
+          {/* Use Cases */}
+          <section>
+            <h2 className="text-3xl font-bold mb-8 text-center">
+              Who Uses {toolDisplayName}?
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {toolContent.useCases.map((useCase, index) => (
+                <div
+                  key={index}
+                  className="rounded-xl border border-gray-200 dark:border-gray-700 p-6 hover:shadow-md transition-shadow"
+                >
+                  <h3 className="font-semibold text-lg mb-2">{useCase.title}</h3>
+                  <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                    {useCase.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
+        </div>
+      )}
     </>
   );
 }
