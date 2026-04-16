@@ -58,6 +58,57 @@ export default async function Page() {
           })
         }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "What is AImage?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "AImage is a free AI image and avatar generator that transforms your photos into stunning artistic styles — including cartoon, anime, cyberpunk, pixel art, CG, colored pencil, and more. No sign-up required to get started."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Is AImage really free to use?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes! AImage offers free daily credits for all users without requiring an account. You can generate AI images immediately. Premium plans are available for higher usage limits and priority processing."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "What image styles does AImage support?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "AImage supports 8 AI image styles: Cartoon (anime), Cyberpunk, CG (film-grade), Pixel Art, Colored Pencil, Old Photo Retouching, 1-Inch ID Photo, and Miniature Figurine. Each style is powered by advanced AI models."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "How long does it take to generate an AI image?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Most AI image transformations complete within 10–30 seconds. Processing time may vary depending on image complexity and server load."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Can I use the generated images commercially?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Images generated with AImage can be used for personal projects, social media, and creative purposes. For commercial use, please review our terms of service or upgrade to a premium plan."
+                }
+              }
+            ]
+          })
+        }}
+      />
       <HomePage
         usage={usage}
         user={user}

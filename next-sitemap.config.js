@@ -22,6 +22,17 @@ module.exports = {
   additionalPaths: async (config) => [
     // 这个版本的next-sitemap无法把app router的静态目录加载进来，所以在这里手动添加了
     await config.transform(config, "/"),
+    // Tools sub-pages
+    await config.transform(config, "/tools/cartoon"),
+    await config.transform(config, "/tools/cyberpunk"),
+    await config.transform(config, "/tools/cg"),
+    await config.transform(config, "/tools/pixel"),
+    await config.transform(config, "/tools/colored-pencil"),
+    await config.transform(config, "/tools/old-photo-retouching"),
+    await config.transform(config, "/tools/1-inch"),
+    await config.transform(config, "/tools/miniature-figurine"),
+    // Blog
+    await config.transform(config, "/blog"),
   ],
   robotsTxtOptions: {
     // additionalSitemaps: [
