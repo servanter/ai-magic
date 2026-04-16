@@ -2,7 +2,7 @@ import { SiteConfig } from "@/types/siteConfig"
 
 const baseSiteConfig = {
   name: "AImage",
-  title: "AImage - Free AI Image & Avatar Generator | Photo to Cartoon",
+  title: "AImage - Free AI Image & Avatar Generator",
   description:
     "Generate stunning AI avatars and images for free. Upload any photo and instantly transform it into cartoon, anime, or artistic styles. Perfect for all social platforms.",
   url: "https://www.aimage.top",
