@@ -19,7 +19,7 @@ export default function Header({ user }: { user?: UserInfo }) {
         <div className="flex items-center gap-6">
           <MainHeader />
           {/* Desktop Navigation */}
-          <nav className="hidden sm:flex items-center gap-8 text-base text-zinc-700">
+          <nav className="hidden md:flex items-center gap-6 text-base text-zinc-700 font-medium">
             <a href="/" className="hover:text-blue-500 transition-colors">Home</a>
             <a href="/#try-it-now" className="hover:text-blue-500 transition-colors">Try it now🔥</a>
             <a href="/#features" className="hover:text-blue-500 transition-colors">Features</a>
@@ -31,7 +31,7 @@ export default function Header({ user }: { user?: UserInfo }) {
         <div className="flex items-center gap-4">
           {/* Mobile Menu Button */}
           <button
-            className="sm:hidden p-2 text-zinc-700 hover:text-blue-500 transition-colors"
+            className="md:hidden p-2 text-zinc-700 hover:text-blue-500 transition-colors"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle menu"
           >
@@ -60,7 +60,7 @@ export default function Header({ user }: { user?: UserInfo }) {
 
       {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
-        <div className="sm:hidden absolute top-16 left-0 right-0 bg-white/95 border-b shadow-lg backdrop-blur-sm">
+        <div className="md:hidden absolute top-16 left-0 right-0 bg-white/95 border-b shadow-lg backdrop-blur-sm z-40">
           <nav className="flex flex-col px-4 py-3 gap-3">
             <a 
               href="/" 
