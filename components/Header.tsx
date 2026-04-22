@@ -5,21 +5,20 @@ import { UserInfo } from "@/types/user";
 export default function Header({ user }: { user?: UserInfo }) {
   return (
     <div
-      className="fixed z-50 h-14 w-full border-b bg-white bg-opacity-60 first-letter:shadow-sm"
+      className="fixed top-0 left-0 right-0 z-50 h-16 w-full border-b bg-white/80 shadow-sm"
       style={{
         backdropFilter: "saturate(50%) contrast(2) blur(5px)",
       }}
     >
-      <header className="flex justify-between items-center w-full mt-1 border-b-1 pb-0 sm:px-4 px-2">
+      <header className="flex justify-between items-center h-full w-full px-4 sm:px-6 max-w-7xl mx-auto">
         <div className="flex items-center gap-6">
           <MainHeader />
-          <nav className="hidden sm:flex items-center pl-8 gap-8 text-lg text-zinc-700">
-            <a href="/" className="hover:text-blue-500">Home</a>
-            <a href="/#try-it-now" className="hover:text-blue-500">Try it now🔥</a>
-            <a href="/#features" className="hover:text-blue-500">Features</a>
-            {/* <a href="/" className="hover:text-blue-500">Use Cases</a> */}
-            <a href="/#upgrade" className="hover:text-blue-500">Pricing</a>
-            <a href="/blog" className="hover:text-blue-500">Blog</a>
+          <nav className="hidden sm:flex items-center gap-8 text-base text-zinc-700">
+            <a href="/" className="hover:text-blue-500 transition-colors">Home</a>
+            <a href="/#try-it-now" className="hover:text-blue-500 transition-colors">Try it now🔥</a>
+            <a href="/#features" className="hover:text-blue-500 transition-colors">Features</a>
+            <a href="/#upgrade" className="hover:text-blue-500 transition-colors">Pricing</a>
+            <a href="/blog" className="hover:text-blue-500 transition-colors">Blog</a>
           </nav>
         </div>
         <UserAccountHeader
