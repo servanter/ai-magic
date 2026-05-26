@@ -258,7 +258,7 @@ Let's see how AI is solving these problems **right now** (not sci-fi, not "in 10
 
 **Outcome**:  
 - **Primary PCI** (stent placement) done at 8:35 PM (1 hour after arrival)  
-- **Door-to-balloon time**: 60 minutes (NHS target: <90 minutes for STEMI)  
+- **Door-to-balloon time**: 60 minutes (NHS target: under 90 minutes for STEMI)  
 - **Heart damage**: Minimal (troponin peaked at 1,200, vs would've been 8,000+ if delayed 2 hours)  
 - **Prognosis**: Full recovery expected, 95%+ quality of life
 
@@ -417,7 +417,7 @@ Let's zoom out. How does AI compare to human doctors **across all conditions**?
 1. AI examines patient data (images, labs, symptoms)  
 2. AI makes preliminary diagnosis + confidence score  
 3. If confidence >90% and low-risk → AI auto-approves (doctor reviews later, batch mode)  
-4. If confidence <90% or high-risk → Doctor reviews immediately
+4. If confidence under 90% or high-risk → Doctor reviews immediately
 
 **Pros**: Fast (doctor only sees flagged cases), cheap (doctor time focused on hard cases), catches more (AI screens 100% of cases, doctors would miss some in batch review)  
 **Cons**: Trust issue (patients/doctors uncomfortable with AI making first call), legal gray area (who's liable?)
@@ -634,7 +634,7 @@ Your 10-Year Health Forecast (Generated May 2028)
 - Colon Cancer: 8% (average for age 45)
   Actions: Schedule colonoscopy (you're overdue)
 
-🟢 Low Risk (<5%):
+🟢 Low Risk (under 5%):
 - Stroke: 3%
 - Lung Cancer: 0.8% (non-smoker)
 - Dementia: 2%
@@ -796,7 +796,7 @@ Want to create AI-powered visuals for your healthcare content? Try [**AImage**](
 **Depends on the task**:  
 - ✅ **High confidence** (90%+ accuracy): Skin cancer screening, diabetic retinopathy, chest X-ray abnormalities, drug interactions  
 - ⚠️ **Moderate confidence** (80-90% accuracy): Rare diseases, complex multi-system conditions, predicting treatment response  
-- ❌ **Low confidence** (<80% accuracy): Mental health (nuanced, subjective), predicting exact outcomes (too many variables)
+- ❌ **Low confidence** (under 80% accuracy): Mental health (nuanced, subjective), predicting exact outcomes (too many variables)
 
 **Rule of thumb**: If human doctors also struggle (rare diseases, ambiguous symptoms), AI will too. If it's pattern recognition at scale (screening 1,000 images), AI excels.
 

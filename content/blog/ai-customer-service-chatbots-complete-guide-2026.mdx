@@ -219,7 +219,7 @@ return {
 
 **Red Flags to Watch**:
 - Escalation rate > 40% (chatbot not ready)
-- CSAT < 75% (user frustration)
+- CSAT under 75% (user frustration)
 - False positive rate > 10% (hallucinations/wrong answers)
 
 ---
@@ -329,7 +329,7 @@ User Input → AI Agent → Multi-step reasoning → Call multiple APIs → Veri
 ```
 
 **Example**: "I want to return my order and get a refund"
-1. Agent verifies order eligibility (age < 30 days, not used)
+1. Agent verifies order eligibility (age under 30 days, not used)
 2. Generates return label (Shippo API)
 3. Initiates refund (Stripe API)
 4. Sends confirmation email (SendGrid API)
@@ -343,12 +343,12 @@ User Input → AI Agent → Multi-step reasoning → Call multiple APIs → Veri
 
 ### Optimization 1: Response Time Reduction
 
-**Target**: < 3 seconds (95th percentile)
+**Target**: under 3 seconds (95th percentile)
 
 **Techniques**:
 1. **Cache common queries** (50% of questions repeat)
    - Store top 100 Q&A pairs in Redis
-   - Serve instantly (< 50ms)
+   - Serve instantly (under 50ms)
 2. **Parallel API calls** (don't wait sequentially)
    - Fetch user data + order data simultaneously
 3. **Streaming responses** (perceived speed)
@@ -374,8 +374,8 @@ User Input → AI Agent → Multi-step reasoning → Call multiple APIs → Veri
    - Store last 5 messages in session
    - Reference previous answers ("As I mentioned earlier...")
 3. **Confidence thresholds**
-   - If confidence < 70%, ask clarifying question
-   - If confidence < 50%, escalate to human
+   - If confidence under 70%, ask clarifying question
+   - If confidence under 50%, escalate to human
 
 ---
 
@@ -395,7 +395,7 @@ User Input → AI Agent → Multi-step reasoning → Call multiple APIs → Veri
 3. Tag urgency level (high/medium/low)
 ```
 
-**Metric to track**: "Time to first human response after escalation" (target: < 60 seconds)
+**Metric to track**: "Time to first human response after escalation" (target: under 60 seconds)
 
 ---
 
@@ -415,10 +415,10 @@ User Input → AI Agent → Multi-step reasoning → Call multiple APIs → Veri
    - **Typical**: $100k-$200k/year for mid-size companies
 
 **Secondary Metrics**:
-4. **Average Resolution Time** (target: < 2 minutes)
-5. **Escalation Rate** (target: < 20%)
-6. **False Positive Rate** (wrong answers, target: < 3%)
-7. **User Drop-off Rate** (abandon chat mid-conversation, target: < 15%)
+4. **Average Resolution Time** (target: under 2 minutes)
+5. **Escalation Rate** (target: under 20%)
+6. **False Positive Rate** (wrong answers, target: under 3%)
+7. **User Drop-off Rate** (abandon chat mid-conversation, target: under 15%)
 
 ---
 
