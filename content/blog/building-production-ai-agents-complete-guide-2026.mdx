@@ -59,7 +59,7 @@ The journey from prototype to production reveals a harsh reality: **most AI agen
 
 Prototypes handle happy paths. Production handles:
 - **Edge cases**: 1,000+ unexpected inputs per day
-- **Latency requirements**: <200ms response time under load
+- **Latency requirements**: under 200ms response time under load
 - **Reliability targets**: 99.9% uptime = only 8.7 hours downtime/year
 - **Security threats**: DDoS, injection attacks, data exfiltration
 - **Cost at scale**: $50/day prototype → $15,000/month production
@@ -345,14 +345,14 @@ Choosing the right architecture is the foundation of a reliable AI agent. Here a
 **When to Choose Serverless:**
 - Variable traffic patterns (10 requests/hour → 1,000 requests/minute)
 - Development teams want to focus on business logic, not infrastructure
-- Cost optimization for low-volume use cases (<10K requests/day)
+- Cost optimization for low-volume use cases (under 10K requests/day)
 - Rapid prototyping and experimentation
 
 **Cost Comparison (1,000 requests/day, 2GB memory, 10s avg execution time):**
 
 | Architecture | Monthly Cost | Break-even Point |
 |-------------|--------------|------------------|
-| **Serverless (Lambda)** | $45 (1M seconds execution) | <5K requests/day |
+| **Serverless (Lambda)** | $45 (1M seconds execution) | under 5K requests/day |
 | **Container (Fargate)** | $140 (1 task running 24/7) | >10K requests/day |
 | **EC2 (t3.small)** | $15 (reserved) | Always cheaper at steady load |
 
@@ -1370,9 +1370,9 @@ print(f"Avg latency: {summary['avg_latency_ms']:.0f}ms")
 
 | Metric | Good | Warning | Critical |
 |--------|------|---------|----------|
-| **Success Rate** | >99% | 95-99% | <95% |
-| **P95 Latency** | <500ms | 500-2000ms | >2000ms |
-| **Error Rate** | <1% | 1-5% | >5% |
+| **Success Rate** | >99% | 95-99% | under 95% |
+| **P95 Latency** | under 500ms | 500-2000ms | >2000ms |
+| **Error Rate** | under 1% | 1-5% | >5% |
 | **Daily Cost** | Within budget | 110-150% budget | >150% budget |
 
 ---
@@ -1974,7 +1974,7 @@ def handle_user_request(user_id: str, prompt: str):
 | **Error rate >5%** | Critical | Page on-call engineer | LLM API down |
 | **P95 latency >5s** | Warning | Notify team Slack | Database slow |
 | **Daily cost >$500** | Warning | Notify finance team | Unexpected usage spike |
-| **Success rate <95%** | Critical | Page on-call engineer | Tool failures |
+| **Success rate under 95%** | Critical | Page on-call engineer | Tool failures |
 | **Token usage +50% day-over-day** | Info | Notify team Slack | Possible bug |
 
 **Alert Fatigue Prevention:**
@@ -2246,9 +2246,9 @@ As your AI agent grows from 100 to 100,000 requests/day, scaling challenges emer
 | **1M req/day** | $15,000/mo | $24,000/mo | +60% |
 
 **When to Go Multi-Region:**
-- Latency requirements <100ms globally
+- Latency requirements under 100ms globally
 - Compliance requires data residency (EU, China)
-- Disaster recovery requirements (RTO <1 hour)
+- Disaster recovery requirements (RTO under 1 hour)
 - >50% of users outside primary region
 
 ---
@@ -2611,7 +2611,7 @@ def test_caching():
     latency2 = response2['metadata']['latency_ms']
     
     # Cache hit should be much faster
-    assert latency2 < latency1 * 0.1  # <10% of original latency
+    assert latency2 < latency1 * 0.1  # less than 10% of original latency
 ```
 
 ---
@@ -2660,8 +2660,8 @@ class AIAgentUser(HttpUser):
 | Scenario | Users | Spawn Rate | Duration | Target Metrics |
 |----------|-------|-----------|----------|----------------|
 | **Smoke test** | 10 | 1/sec | 5 min | No errors, baseline latency |
-| **Normal load** | 100 | 10/sec | 30 min | <1% errors, p95 <2s |
-| **Peak load** | 500 | 50/sec | 15 min | <5% errors, p95 <5s |
+| **Normal load** | 100 | 10/sec | 30 min | under 1% errors, p95 under 2s |
+| **Peak load** | 500 | 50/sec | 15 min | under 5% errors, p95 under 5s |
 | **Stress test** | 1,000+ | 100/sec | 15 min | Find breaking point |
 
 **What to Monitor During Load Tests:**
