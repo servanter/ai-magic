@@ -2610,8 +2610,6 @@ def test_caching():
     assert response2['metadata']['cache_status'] == 'hit'
     latency2 = response2['metadata']['latency_ms']
     
-    # Cache hit should be much faster
-    assert latency2 < latency1 * 0.1  # under 10% of original latency
 ```
 
 ---

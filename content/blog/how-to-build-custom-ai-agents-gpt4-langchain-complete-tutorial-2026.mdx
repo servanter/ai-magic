@@ -1,0 +1,1542 @@
+---
+title: 'How to Build Custom AI Agents with GPT-4 and LangChain: Complete Tutorial (2026)'
+description: 'Step-by-step guide to building powerful AI agents with GPT-4 and LangChain. From basic setup to advanced multi-agent systems. Includes complete code examples, debugging tips, and real-world use cases for beginners and experts.'
+date: '2026-05-26'
+image: '/blog/how-to-build-custom-ai-agents-gpt4-langchain-complete-tutorial-2026.jpg'
+tags: ['AI Agents', 'GPT-4', 'LangChain', 'Tutorial', 'Python', 'Development']
+---
+
+![How to Build Custom AI Agents with GPT-4 and LangChain](/blog/how-to-build-custom-ai-agents-gpt4-langchain-complete-tutorial-2026.jpg)
+
+Building custom AI agents has become one of the most exciting frontiers in AI development. With GPT-4's advanced reasoning capabilities and LangChain's powerful orchestration framework, you can create intelligent agents that solve complex problems, automate tasks, and interact naturally with users.
+
+This complete tutorial takes you from zero to building production-ready AI agents. Whether you're a beginner just starting with AI or an experienced developer looking to level up, you'll find practical, actionable guidance with real code examples.
+
+**What You'll Build:**
+- **Basic Agent** (10 lines of code): Simple question-answering agent
+- **Tool-Equipped Agent**: Agent with search, calculation, and file operations
+- **Memory-Enabled Agent**: Agent that remembers context across conversations
+- **Multi-Agent System**: Collaborative agents that divide and conquer complex tasks
+- **Production-Ready Agent**: Deployed, monitored, and scalable
+
+**By the end**, you'll have working code for 5 different agents and understand the patterns to build anything you imagine.
+
+---
+
+## Why Build Custom AI Agents? (The Business Case)
+
+Before diving into code, understand **why** custom agents matter:
+
+### Real-World Impact
+- **Customer Support**: AI agent handles 78% of routine inquiries (1 agent = 3 human agents at $120,000/year)
+- **Data Analysis**: Agent processes 500 spreadsheets overnight (task that took analysts 2 weeks)
+- **Content Creation**: Agent researches + writes + edits blog posts (10 posts/day vs. 2 posts/day human)
+- **Code Review**: Agent catches 89% of security vulnerabilities before production
+
+### Why Not Just Use ChatGPT?
+**ChatGPT limitations:**
+- No tool access (can't search web, read files, execute code)
+- No memory (forgets after 1 conversation)
+- No customization (can't add your company data)
+- No automation (requires human prompt each time)
+
+**Custom agents solve all this:**
+- ✅ **Tools**: Connect to APIs, databases, external services
+- ✅ **Memory**: Remember users, preferences, past interactions
+- ✅ **Knowledge**: Train on your data (docs, policies, codebases)
+- ✅ **Automation**: Run 24/7 without human input
+- ✅ **Control**: Define behavior, guardrails, cost limits
+
+**Cost comparison:**
+- ChatGPT Plus: $20/month/user (no customization)
+- Custom GPT-4 agent: $50-200/month (unlimited users, full control, integrated with your systems)
+
+**When you need a custom agent:**
+1. Task requires multiple steps (research → analyze → decide → act)
+2. Need to connect to your internal systems (CRM, database, APIs)
+3. Task repeats frequently (automate instead of manual each time)
+4. Need context memory (remember user preferences, conversation history)
+5. Require control (guardrails, cost limits, specific behavior)
+
+---
+
+## Prerequisites: What You Need Before Starting
+
+### Required Skills
+- **Python basics** (variables, functions, loops) — if you can write a Flask app, you're ready
+- **API concepts** (requests, JSON) — understanding how to call APIs
+- **Command line** (basic terminal commands) — no GUI here
+
+### Required Accounts
+1. **OpenAI API key** ($5 credit enough to test everything)
+   - Sign up: https://platform.openai.com/signup
+   - Generate key: https://platform.openai.com/api-keys
+   - **Cost**: ~$0.03 per 1,000 words (GPT-4-turbo), ~$0.50 for all examples in this tutorial
+
+2. **Python 3.9+** installed
+   ```bash
+   python --version  # Should show 3.9 or higher
+   ```
+
+3. **Code editor** (VS Code recommended, but any works)
+
+### Estimated Time
+- **Basic Agent (Section 1)**: 15 minutes
+- **Tool Agent (Section 2)**: 30 minutes
+- **Memory Agent (Section 3)**: 45 minutes
+- **Multi-Agent (Section 4)**: 1 hour
+- **Production (Section 5)**: 30 minutes
+- **Total**: ~3 hours (with breaks, debugging, experimentation)
+
+**Don't rush**: Take time to understand each step. The goal isn't to copy-paste code—it's to learn the patterns so you can build your own agents.
+
+---
+
+## Part 1: Your First AI Agent (10 Lines of Code)
+
+Let's build the simplest possible agent: **a conversational AI that answers questions using GPT-4**.
+
+### Step 1.1: Setup Environment
+
+Create project folder:
+```bash
+mkdir ai-agent-tutorial
+cd ai-agent-tutorial
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+```
+
+Install dependencies:
+```bash
+pip install langchain langchain-openai openai
+```
+
+Create `.env` file (store API key):
+```bash
+# .env
+OPENAI_API_KEY=sk-your-key-here
+```
+
+**Security note**: Never commit `.env` to Git. Add to `.gitignore`:
+```bash
+echo ".env" >> .gitignore
+```
+
+### Step 1.2: Basic Agent Code
+
+Create `basic_agent.py`:
+```python
+from langchain_openai import ChatOpenAI
+from langchain.agents import initialize_agent, AgentType
+from langchain.agents import Tool
+import os
+
+# Load API key
+os.environ["OPENAI_API_KEY"] = "sk-your-key-here"  # Or use python-dotenv
+
+# Initialize GPT-4
+llm = ChatOpenAI(model="gpt-4-turbo", temperature=0.7)
+
+# Define empty tools list (agent with no tools, just conversation)
+tools = []
+
+# Create agent
+agent = initialize_agent(
+    tools=tools,
+    llm=llm,
+    agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
+    verbose=True
+)
+
+# Test the agent
+response = agent.run("What is the capital of France? Explain why it's significant.")
+print(response)
+```
+
+**Run it:**
+```bash
+python basic_agent.py
+```
+
+**Expected output:**
+```
+> Entering new AgentExecutor chain...
+The capital of France is Paris. It's significant because it's a global center of art, fashion, gastronomy, and culture. Paris is home to iconic landmarks like the Eiffel Tower, Louvre Museum, and Notre-Dame Cathedral. It's also a major political and economic hub in Europe.
+
+> Finished chain.
+```
+
+### What Just Happened?
+1. **ChatOpenAI**: Connects to GPT-4 API
+2. **initialize_agent**: Creates an agent (decision-making system)
+3. **AgentType.ZERO_SHOT_REACT_DESCRIPTION**: Agent type (more on this below)
+4. **verbose=True**: Shows agent's reasoning steps (useful for debugging)
+5. **agent.run()**: Sends query, gets response
+
+### Understanding Agent Types
+
+LangChain offers several agent types. Choose based on your needs:
+
+| Agent Type | When to Use | Example |
+|-----------|-------------|---------|
+| **ZERO_SHOT_REACT_DESCRIPTION** | General purpose, no examples needed | "Answer questions about anything" |
+| **CONVERSATIONAL_REACT_DESCRIPTION** | Multi-turn conversations with memory | "Chatbot that remembers previous messages" |
+| **STRUCTURED_CHAT_ZERO_SHOT_REACT_DESCRIPTION** | Complex tool inputs (JSON, multi-param) | "Tool that accepts {user_id, action, data}" |
+| **OPENAI_FUNCTIONS** | OpenAI's function calling (fastest, most reliable) | "Call APIs, execute tools with GPT-4" |
+
+**For this tutorial, we'll use:**
+- **ZERO_SHOT_REACT_DESCRIPTION** (Part 1-2): Simple, beginner-friendly
+- **CONVERSATIONAL_REACT_DESCRIPTION** (Part 3): When we add memory
+- **OPENAI_FUNCTIONS** (Part 4): Production-grade (fastest, cheapest)
+
+### Customizing Your Agent
+
+Modify behavior with parameters:
+```python
+llm = ChatOpenAI(
+    model="gpt-4-turbo",
+    temperature=0.7,       # 0 = deterministic, 1 = creative
+    max_tokens=500,        # Limit response length
+    model_kwargs={
+        "top_p": 0.9,      # Nucleus sampling (diversity)
+        "frequency_penalty": 0.5,  # Reduce repetition
+    }
+)
+```
+
+**Temperature guide:**
+- **0.0-0.3**: Factual tasks (math, data extraction, code)
+- **0.4-0.7**: Balanced (most use cases)
+- **0.8-1.0**: Creative tasks (storytelling, brainstorming)
+
+---
+
+## Part 2: Adding Tools (Search, Calculate, File Access)
+
+A basic agent is just a fancy chatbot. **Tools make agents useful**—they can search the web, perform calculations, access files, and execute code.
+
+### Step 2.1: Understanding Tools
+
+A **tool** is any function your agent can call. Examples:
+- **Search tool**: Google search, Wikipedia lookup
+- **Calculator tool**: Math operations
+- **File tool**: Read/write files
+- **API tool**: Call external APIs (weather, stock prices, CRM)
+- **Code executor**: Run Python code
+
+**How tools work:**
+1. Agent receives user query
+2. Agent decides which tool(s) to use
+3. Agent calls tool(s) with appropriate inputs
+4. Agent reads tool outputs
+5. Agent formulates final response
+
+### Step 2.2: Build a Calculator Tool
+
+Create `calculator_tool.py`:
+```python
+from langchain.agents import Tool
+from langchain.agents import initialize_agent, AgentType
+from langchain_openai import ChatOpenAI
+import math
+import re
+
+# Simple calculator function
+def calculate(expression: str) -> str:
+    """
+    Evaluates a mathematical expression.
+    Input: Math expression as string (e.g., "2 + 2", "sqrt(16)", "10 ** 2")
+    Output: Result as string
+    """
+    try:
+        # Security: Only allow math operations (no eval of arbitrary code)
+        allowed = set("0123456789+-*/().** ")
+        if not all(c in allowed or c.isspace() for c in expression.replace("sqrt", "").replace("math.", "")):
+            return "Error: Invalid characters in expression"
+        
+        # Replace sqrt with math.sqrt
+        expression = expression.replace("sqrt", "math.sqrt")
+        
+        # Evaluate safely
+        result = eval(expression, {"__builtins__": {}, "math": math})
+        return f"Result: {result}"
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+# Create tool
+calculator_tool = Tool(
+    name="Calculator",
+    func=calculate,
+    description="Useful for mathematical calculations. Input should be a valid math expression like '2+2' or 'sqrt(16)'. Use Python syntax."
+)
+
+# Initialize agent with calculator
+llm = ChatOpenAI(model="gpt-4-turbo", temperature=0)
+agent = initialize_agent(
+    tools=[calculator_tool],
+    llm=llm,
+    agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
+    verbose=True
+)
+
+# Test queries
+queries = [
+    "What is 157 * 293?",
+    "Calculate the square root of 12345",
+    "If I invest $10,000 at 7% annual return for 10 years, how much will I have? Use formula: P * (1 + r)^t"
+]
+
+for query in queries:
+    print(f"\n{'='*60}")
+    print(f"Query: {query}")
+    print('='*60)
+    response = agent.run(query)
+    print(f"Response: {response}\n")
+```
+
+**Run it:**
+```bash
+python calculator_tool.py
+```
+
+**Expected output:**
+```
+==============================================================
+Query: What is 157 * 293?
+==============================================================
+
+> Entering new AgentExecutor chain...
+I should use the Calculator tool to compute this.
+
+Action: Calculator
+Action Input: 157 * 293
+
+Result: 46001
+
+Final Answer: 46,001
+
+> Finished chain.
+Response: 46,001
+```
+
+### What Changed?
+1. **Tool definition**: Created `calculate()` function + wrapped in `Tool()`
+2. **Tool description**: Agent reads this to decide when to use the tool (critical—be specific!)
+3. **Agent reasoning**: Agent now has a "thought → action → observation → final answer" loop
+
+### Step 2.3: Add Web Search Tool
+
+Install search library:
+```bash
+pip install duckduckgo-search
+```
+
+Create `search_agent.py`:
+```python
+from langchain.agents import Tool, initialize_agent, AgentType
+from langchain_openai import ChatOpenAI
+from duckduckgo_search import DDGS
+
+def search_web(query: str) -> str:
+    """
+    Searches the web using DuckDuckGo.
+    Input: Search query (e.g., "latest AI news")
+    Output: Top 3 search results
+    """
+    try:
+        ddgs = DDGS()
+        results = ddgs.text(query, max_results=3)
+        
+        if not results:
+            return "No results found"
+        
+        output = "Search results:\n\n"
+        for i, result in enumerate(results, 1):
+            output += f"{i}. {result['title']}\n"
+            output += f"   {result['body'][:200]}...\n"
+            output += f"   URL: {result['href']}\n\n"
+        
+        return output
+    except Exception as e:
+        return f"Search error: {str(e)}"
+
+# Create search tool
+search_tool = Tool(
+    name="WebSearch",
+    func=search_web,
+    description="Searches the web for current information. Use this when you need up-to-date facts, news, or information not in your training data. Input should be a search query."
+)
+
+# Calculator tool from before
+def calculate(expression: str) -> str:
+    import math
+    try:
+        expression = expression.replace("sqrt", "math.sqrt")
+        result = eval(expression, {"__builtins__": {}, "math": math})
+        return f"Result: {result}"
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+calculator_tool = Tool(
+    name="Calculator",
+    func=calculate,
+    description="Performs mathematical calculations. Input: math expression (e.g., '2+2', 'sqrt(16)')."
+)
+
+# Initialize agent with both tools
+llm = ChatOpenAI(model="gpt-4-turbo", temperature=0)
+agent = initialize_agent(
+    tools=[search_tool, calculator_tool],
+    llm=llm,
+    agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
+    verbose=True
+)
+
+# Test multi-tool query
+query = """
+Who won the 2024 US presidential election? 
+Then calculate how many days between the election (November 5, 2024) and today (May 26, 2026).
+"""
+
+response = agent.run(query)
+print(f"\n\nFinal Response:\n{response}")
+```
+
+**Key insight**: Agent **automatically decides** which tool to use based on descriptions. You don't tell it "use search first, then calculator"—it figures it out.
+
+### Step 2.4: File Access Tool
+
+Create `file_agent.py`:
+```python
+from langchain.agents import Tool, initialize_agent, AgentType
+from langchain_openai import ChatOpenAI
+import os
+
+def read_file(filepath: str) -> str:
+    """
+    Reads content from a file.
+    Input: File path (e.g., 'data.txt', 'report.md')
+    Output: File contents
+    """
+    try:
+        with open(filepath, 'r', encoding='utf-8') as f:
+            content = f.read()
+        return f"File content ({len(content)} characters):\n\n{content}"
+    except FileNotFoundError:
+        return f"Error: File '{filepath}' not found"
+    except Exception as e:
+        return f"Error reading file: {str(e)}"
+
+def write_file(input_str: str) -> str:
+    """
+    Writes content to a file.
+    Input: Format "filepath|content" (e.g., "output.txt|Hello world")
+    Output: Success/error message
+    """
+    try:
+        filepath, content = input_str.split("|", 1)
+        with open(filepath, 'w', encoding='utf-8') as f:
+            f.write(content)
+        return f"Successfully wrote {len(content)} characters to '{filepath}'"
+    except ValueError:
+        return "Error: Input must be in format 'filepath|content'"
+    except Exception as e:
+        return f"Error writing file: {str(e)}"
+
+def list_files(directory: str = ".") -> str:
+    """
+    Lists files in a directory.
+    Input: Directory path (default: current directory)
+    Output: List of files
+    """
+    try:
+        files = os.listdir(directory)
+        return f"Files in '{directory}':\n" + "\n".join(f"- {f}" for f in files)
+    except Exception as e:
+        return f"Error listing files: {str(e)}"
+
+# Create tools
+read_tool = Tool(name="ReadFile", func=read_file, description="Reads content from a file. Input: filepath")
+write_tool = Tool(name="WriteFile", func=write_file, description="Writes content to a file. Input: 'filepath|content'")
+list_tool = Tool(name="ListFiles", func=list_files, description="Lists files in a directory. Input: directory path")
+
+# Initialize agent
+llm = ChatOpenAI(model="gpt-4-turbo", temperature=0)
+agent = initialize_agent(
+    tools=[read_tool, write_tool, list_tool],
+    llm=llm,
+    agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
+    verbose=True,
+    max_iterations=5  # Prevent infinite loops
+)
+
+# Test: Create file, read it, modify it
+test_query = """
+Create a file called 'todo.txt' with these tasks:
+1. Buy groceries
+2. Call dentist
+3. Finish project report
+
+Then read the file to confirm it was created correctly.
+"""
+
+response = agent.run(test_query)
+print(f"\n\nFinal Response:\n{response}")
+```
+
+**Security warning**: File tools are powerful but risky. In production:
+- **Whitelist directories**: Only allow access to specific folders
+- **Validate inputs**: Check for path traversal attacks (`../../etc/passwd`)
+- **Limit file size**: Prevent reading/writing huge files
+- **Audit logs**: Track all file operations
+
+---
+
+## Part 3: Adding Memory (Remember Past Conversations)
+
+Right now, your agent is **stateless**—it forgets everything after each conversation. Memory makes agents useful for:
+- **Chatbots**: Remember user preferences, past questions
+- **Personal assistants**: Track ongoing projects, todos
+- **Customer support**: Reference past tickets, customer history
+
+### Step 3.1: Conversation Memory
+
+Create `memory_agent.py`:
+```python
+from langchain.agents import initialize_agent, AgentType, Tool
+from langchain_openai import ChatOpenAI
+from langchain.memory import ConversationBufferMemory
+
+# Simple greeting tool (to demonstrate memory)
+def greet_user(name: str) -> str:
+    return f"Hello, {name}! Nice to meet you."
+
+greet_tool = Tool(
+    name="Greeting",
+    func=greet_user,
+    description="Greets a user by name. Input: user's name"
+)
+
+# Initialize memory
+memory = ConversationBufferMemory(
+    memory_key="chat_history",
+    return_messages=True
+)
+
+# Initialize agent with memory
+llm = ChatOpenAI(model="gpt-4-turbo", temperature=0.7)
+agent = initialize_agent(
+    tools=[greet_tool],
+    llm=llm,
+    agent=AgentType.CONVERSATIONAL_REACT_DESCRIPTION,  # Note: Different agent type for memory
+    memory=memory,
+    verbose=True
+)
+
+# Simulate conversation
+conversations = [
+    "Hi, my name is Alice.",
+    "What's my name?",
+    "I like pizza. Remember that.",
+    "What do I like to eat?",
+    "What did we talk about earlier?"
+]
+
+for i, user_input in enumerate(conversations, 1):
+    print(f"\n{'='*60}")
+    print(f"Turn {i}: {user_input}")
+    print('='*60)
+    response = agent.run(user_input)
+    print(f"Agent: {response}")
+```
+
+**Run it:**
+```bash
+python memory_agent.py
+```
+
+**Expected output:**
+```
+Turn 1: Hi, my name is Alice.
+Agent: Hello, Alice! Nice to meet you.
+
+Turn 2: What's my name?
+Agent: Your name is Alice.
+
+Turn 3: I like pizza. Remember that.
+Agent: Got it! I'll remember that you like pizza.
+
+Turn 4: What do I like to eat?
+Agent: You like pizza!
+
+Turn 5: What did we talk about earlier?
+Agent: We talked about your name (Alice) and that you like pizza.
+```
+
+### What Changed?
+1. **ConversationBufferMemory**: Stores all messages (user + agent) in memory
+2. **AgentType.CONVERSATIONAL_REACT_DESCRIPTION**: Agent type designed for multi-turn conversations
+3. **memory_key="chat_history"**: Agent can access past messages via this key
+
+### Step 3.2: Memory Types (Choose the Right One)
+
+LangChain offers several memory types. Choose based on your needs:
+
+#### 1. ConversationBufferMemory (Simple, Full History)
+**Stores**: Every message
+**Use case**: Short conversations (fewer than 10 messages)
+**Pros**: Simple, no data loss
+**Cons**: Token usage grows infinitely (expensive for long conversations)
+
+```python
+from langchain.memory import ConversationBufferMemory
+
+memory = ConversationBufferMemory(
+    memory_key="chat_history",
+    return_messages=True
+)
+```
+
+#### 2. ConversationBufferWindowMemory (Last N Messages)
+**Stores**: Last N messages only
+**Use case**: Long conversations, only recent context matters
+**Pros**: Fixed token usage
+**Cons**: Forgets old context
+
+```python
+from langchain.memory import ConversationBufferWindowMemory
+
+memory = ConversationBufferWindowMemory(
+    k=5,  # Remember last 5 messages
+    memory_key="chat_history",
+    return_messages=True
+)
+```
+
+#### 3. ConversationSummaryMemory (Summarize Old Messages)
+**Stores**: Recent messages + summary of old messages
+**Use case**: Long conversations, need context from beginning
+**Pros**: Balances detail and cost
+**Cons**: Summary may lose nuance
+
+```python
+from langchain.memory import ConversationSummaryMemory
+
+memory = ConversationSummaryMemory(
+    llm=ChatOpenAI(model="gpt-3.5-turbo"),  # Use cheaper model for summaries
+    memory_key="chat_history",
+    return_messages=True
+)
+```
+
+#### 4. ConversationEntityMemory (Remember Specific Facts)
+**Stores**: Extracted entities (names, preferences, facts)
+**Use case**: Customer support, personal assistants
+**Pros**: Efficient, focuses on important facts
+**Cons**: May miss context
+
+```python
+from langchain.memory import ConversationEntityMemory
+
+memory = ConversationEntityMemory(
+    llm=ChatOpenAI(model="gpt-4-turbo"),
+    memory_key="chat_history",
+    return_messages=True
+)
+```
+
+**Comparison table:**
+
+| Memory Type | Token Usage | Context Quality | Best For |
+|------------|-------------|-----------------|----------|
+| Buffer | High (grows infinitely) | Perfect | Short conversations |
+| Window | Low (fixed) | Recent only | Chatbots, support |
+| Summary | Medium (fixed) | Good | Long-running assistants |
+| Entity | Low | Focused facts | Customer data, preferences |
+
+### Step 3.3: Persistent Memory (Save to Database)
+
+Previous examples store memory in RAM—restarting the script loses everything. For production, save to database:
+
+```python
+from langchain.memory import ConversationBufferMemory
+from langchain.memory.chat_message_histories import FileChatMessageHistory
+
+# Save to JSON file (simple, no database needed)
+history = FileChatMessageHistory("conversation_history.json")
+
+memory = ConversationBufferMemory(
+    chat_memory=history,
+    memory_key="chat_history",
+    return_messages=True
+)
+
+# Now memory persists across script runs!
+```
+
+**For production** (PostgreSQL, Redis, MongoDB):
+```python
+# PostgreSQL example
+from langchain.memory.chat_message_histories import PostgresChatMessageHistory
+
+history = PostgresChatMessageHistory(
+    connection_string="postgresql://user:pass@localhost/db",
+    session_id="user_12345"  # Unique per user
+)
+
+memory = ConversationBufferMemory(
+    chat_memory=history,
+    memory_key="chat_history",
+    return_messages=True
+)
+```
+
+---
+
+## Part 4: Multi-Agent Systems (Collaborative Agents)
+
+Single agents are powerful, but complex tasks require **multiple specialized agents** working together:
+- **Research Agent**: Searches web, gathers information
+- **Analyst Agent**: Analyzes data, identifies patterns
+- **Writer Agent**: Writes reports, summaries
+- **Coder Agent**: Writes code, fixes bugs
+
+### Step 4.1: Simple Multi-Agent System
+
+Create `multi_agent.py`:
+```python
+from langchain_openai import ChatOpenAI
+from langchain.agents import initialize_agent, AgentType, Tool
+from typing import Dict
+
+# --- Agent 1: Researcher ---
+def research_topic(topic: str) -> str:
+    """Simulates web research (in real system, would call search API)"""
+    # Mock data (replace with real web search in production)
+    research_db = {
+        "AI agents": "AI agents are autonomous systems that can perceive, reason, and act. Key frameworks: LangChain, AutoGPT, BabyAGI. Major companies: OpenAI, Anthropic, Google.",
+        "climate change": "Global temperatures risen 1.1°C since pre-industrial. Paris Agreement aims to limit to 1.5°C. Major challenges: fossil fuels, deforestation.",
+    }
+    return research_db.get(topic.lower(), f"No research data found for '{topic}'")
+
+research_tool = Tool(
+    name="Research",
+    func=research_topic,
+    description="Researches a topic and returns key facts. Input: topic name"
+)
+
+researcher_llm = ChatOpenAI(model="gpt-4-turbo", temperature=0)
+researcher = initialize_agent(
+    tools=[research_tool],
+    llm=researcher_llm,
+    agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
+    verbose=False
+)
+
+# --- Agent 2: Analyst ---
+def analyze_data(data: str) -> str:
+    """Analyzes data and identifies key insights"""
+    # In production, this would perform statistical analysis, ML predictions, etc.
+    word_count = len(data.split())
+    return f"Analysis: Data contains {word_count} words. Key terms: {', '.join(set(data.split()[:5]))}"
+
+analyze_tool = Tool(
+    name="Analyze",
+    func=analyze_data,
+    description="Analyzes data and extracts insights. Input: data to analyze"
+)
+
+analyst_llm = ChatOpenAI(model="gpt-4-turbo", temperature=0)
+analyst = initialize_agent(
+    tools=[analyze_tool],
+    llm=analyst_llm,
+    agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
+    verbose=False
+)
+
+# --- Agent 3: Writer ---
+def write_report(topic: str, content: str) -> str:
+    """Formats content into a report"""
+    return f"""
+# Report: {topic}
+
+## Summary
+{content[:200]}...
+
+## Detailed Findings
+{content}
+
+---
+*Generated by AI Agent System*
+"""
+
+write_tool = Tool(
+    name="WriteReport",
+    func=write_report,
+    description="Formats content into a professional report. Input: 'topic|content'"
+)
+
+writer_llm = ChatOpenAI(model="gpt-4-turbo", temperature=0.7)
+writer = initialize_agent(
+    tools=[write_tool],
+    llm=writer_llm,
+    agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
+    verbose=False
+)
+
+# --- Orchestrator: Coordinates all agents ---
+def orchestrator(task: str) -> str:
+    """
+    Coordinates multiple agents to complete a task.
+    Example task: "Research AI agents and write a report"
+    """
+    print(f"\n🤖 Orchestrator received task: {task}\n")
+    
+    # Step 1: Research
+    print("📚 Step 1: Research Agent working...")
+    research_result = researcher.run(f"Research the topic: {task}")
+    print(f"   Research complete: {len(research_result)} characters")
+    
+    # Step 2: Analyze
+    print("\n📊 Step 2: Analyst Agent working...")
+    analysis_result = analyst.run(f"Analyze this data: {research_result}")
+    print(f"   Analysis complete: {analysis_result}")
+    
+    # Step 3: Write
+    print("\n✍️  Step 3: Writer Agent working...")
+    report = writer.run(f"{task}|{research_result}\n\nAnalysis: {analysis_result}")
+    print("   Report complete!")
+    
+    return report
+
+# --- Test the system ---
+task = "AI agents"
+final_report = orchestrator(task)
+print("\n" + "="*60)
+print("FINAL REPORT")
+print("="*60)
+print(final_report)
+```
+
+**Run it:**
+```bash
+python multi_agent.py
+```
+
+**Expected output:**
+```
+🤖 Orchestrator received task: AI agents
+
+📚 Step 1: Research Agent working...
+   Research complete: 189 characters
+
+📊 Step 2: Analyst Agent working...
+   Analysis complete: Analysis: Data contains 27 words. Key terms: AI, agents, are, autonomous, systems
+
+✍️  Step 3: Writer Agent working...
+   Report complete!
+
+==============================================================
+FINAL REPORT
+==============================================================
+
+# Report: AI agents
+
+## Summary
+AI agents are autonomous systems that can perceive, reason, and act. Key frameworks: LangChain, AutoGPT, BabyAGI...
+
+## Detailed Findings
+AI agents are autonomous systems that can perceive, reason, and act. Key frameworks: LangChain, AutoGPT, BabyAGI. Major companies: OpenAI, Anthropic, Google.
+
+Analysis: Data contains 27 words. Key terms: AI, agents, are, autonomous, systems
+
+---
+*Generated by AI Agent System*
+```
+
+### Step 4.2: Advanced Pattern (Agent Communication)
+
+Instead of orchestrator calling agents sequentially, agents can **communicate directly**:
+
+```python
+from langgraph.graph import StateGraph, END
+from typing import TypedDict, Annotated
+import operator
+
+# Define shared state (agents communicate via this)
+class AgentState(TypedDict):
+    task: str
+    research_data: str
+    analysis: str
+    final_report: str
+
+# Research agent
+def research_node(state: AgentState) -> AgentState:
+    print("🔍 Research Agent working...")
+    # Simulate research
+    state["research_data"] = f"Research findings about: {state['task']}"
+    return state
+
+# Analyst agent
+def analyze_node(state: AgentState) -> AgentState:
+    print("📊 Analyst Agent working...")
+    # Simulate analysis
+    state["analysis"] = f"Analysis of: {state['research_data']}"
+    return state
+
+# Writer agent
+def write_node(state: AgentState) -> AgentState:
+    print("✍️  Writer Agent working...")
+    # Simulate writing
+    state["final_report"] = f"Report:\n{state['research_data']}\n\n{state['analysis']}"
+    return state
+
+# Build workflow graph
+workflow = StateGraph(AgentState)
+workflow.add_node("research", research_node)
+workflow.add_node("analyze", analyze_node)
+workflow.add_node("write", write_node)
+
+# Define flow: research → analyze → write → end
+workflow.set_entry_point("research")
+workflow.add_edge("research", "analyze")
+workflow.add_edge("analyze", "write")
+workflow.add_edge("write", END)
+
+# Compile and run
+app = workflow.compile()
+result = app.invoke({"task": "AI agents"})
+print("\n" + result["final_report"])
+```
+
+**Why use graphs?**
+- **Parallel execution**: Multiple agents run simultaneously (faster)
+- **Conditional routing**: Agent A → Agent B OR Agent C (based on output)
+- **Loops**: Agents can iterate until quality threshold met
+
+---
+
+## Part 5: Production Deployment (Make It Real)
+
+You've built powerful agents locally. Now make them production-ready: deployed, monitored, cost-controlled.
+
+### Step 5.1: Add Error Handling
+
+```python
+from langchain.agents import initialize_agent, AgentType
+from langchain_openai import ChatOpenAI
+from langchain.agents import Tool
+import logging
+
+# Setup logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+def safe_agent_run(agent, query: str, max_retries: int = 3):
+    """
+    Runs agent with error handling and retries.
+    """
+    for attempt in range(max_retries):
+        try:
+            logger.info(f"Attempt {attempt + 1}: Running query: {query}")
+            response = agent.run(query)
+            logger.info(f"Success: {response[:100]}...")
+            return response
+        except Exception as e:
+            logger.error(f"Attempt {attempt + 1} failed: {str(e)}")
+            if attempt == max_retries - 1:
+                return f"Error: Agent failed after {max_retries} attempts. Last error: {str(e)}"
+    
+# Example usage
+llm = ChatOpenAI(model="gpt-4-turbo", temperature=0)
+agent = initialize_agent(tools=[], llm=llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION)
+
+response = safe_agent_run(agent, "What is AI?")
+print(response)
+```
+
+### Step 5.2: Add Cost Tracking
+
+GPT-4 costs add up fast. Track spending:
+
+```python
+from langchain.callbacks import get_openai_callback
+
+def run_with_cost_tracking(agent, query: str):
+    with get_openai_callback() as cb:
+        response = agent.run(query)
+        print(f"\n💰 Cost Tracking:")
+        print(f"   Tokens: {cb.total_tokens}")
+        print(f"   Cost: ${cb.total_cost:.4f}")
+        print(f"   Prompt tokens: {cb.prompt_tokens}")
+        print(f"   Completion tokens: {cb.completion_tokens}")
+    return response
+
+# Example
+response = run_with_cost_tracking(agent, "Explain quantum computing in simple terms")
+```
+
+**Cost optimization tips:**
+1. **Use GPT-3.5 for simple tasks** (20x cheaper than GPT-4)
+2. **Cache results** (same query → same response, don't call API twice)
+3. **Limit max_tokens** (prevent runaway costs)
+4. **Use streaming** (cheaper, faster user experience)
+
+### Step 5.3: Deploy as API (Flask)
+
+Make your agent accessible via HTTP API:
+
+```python
+from flask import Flask, request, jsonify
+from langchain_openai import ChatOpenAI
+from langchain.agents import initialize_agent, AgentType
+
+app = Flask(__name__)
+
+# Initialize agent (reuse across requests)
+llm = ChatOpenAI(model="gpt-4-turbo", temperature=0.7)
+agent = initialize_agent(
+    tools=[],  # Add your tools here
+    llm=llm,
+    agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION
+)
+
+@app.route('/chat', methods=['POST'])
+def chat():
+    """
+    Endpoint: POST /chat
+    Body: {"message": "Your question here"}
+    Response: {"response": "Agent's answer"}
+    """
+    try:
+        data = request.json
+        user_message = data.get('message')
+        
+        if not user_message:
+            return jsonify({"error": "Missing 'message' field"}), 400
+        
+        # Run agent
+        response = agent.run(user_message)
+        
+        return jsonify({"response": response})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/health', methods=['GET'])
+def health():
+    """Health check endpoint"""
+    return jsonify({"status": "healthy"})
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
+```
+
+**Deploy:**
+```bash
+# Local test
+python app.py
+
+# Test with curl
+curl -X POST http://localhost:5000/chat \
+  -H "Content-Type: application/json" \
+  -d '{"message": "What is AI?"}'
+```
+
+**Production deployment options:**
+1. **Heroku**: `git push heroku main` (easiest, free tier)
+2. **AWS Lambda**: Serverless, pay per request
+3. **Docker + DigitalOcean/AWS**: Full control
+4. **Modal**: Serverless GPU (for large models)
+
+### Step 5.4: Add Monitoring (LangSmith)
+
+Track agent performance, debug failures:
+
+```bash
+pip install langsmith
+```
+
+```python
+import os
+os.environ["LANGCHAIN_TRACING_V2"] = "true"
+os.environ["LANGCHAIN_API_KEY"] = "your-langsmith-key"  # Get from https://smith.langchain.com
+
+# Now all agent runs are automatically logged to LangSmith dashboard
+agent.run("Your query")
+```
+
+**LangSmith shows:**
+- Every LLM call (input, output, cost, latency)
+- Tool calls (which tools used, in what order)
+- Errors (where agent failed, why)
+- User feedback (thumbs up/down on responses)
+
+**Free tier**: 5,000 traces/month (enough for testing)
+
+---
+
+## Part 6: Common Mistakes & Debugging
+
+### Mistake 1: Tool Description Too Vague
+
+❌ **Bad:**
+```python
+Tool(
+    name="Helper",
+    func=my_function,
+    description="Helps with stuff"
+)
+```
+
+✅ **Good:**
+```python
+Tool(
+    name="WebSearch",
+    func=search_web,
+    description="Searches the web for current information. Use when you need up-to-date facts, news, or data not in your training data. Input: search query (e.g., 'latest AI news', 'population of France')."
+)
+```
+
+**Why it matters**: Agent decides which tool to use based ONLY on description. Vague description = agent never uses the tool.
+
+### Mistake 2: Infinite Agent Loops
+
+Agent keeps calling tools without reaching final answer. **Fix:**
+```python
+agent = initialize_agent(
+    tools=tools,
+    llm=llm,
+    agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
+    max_iterations=10,  # Force stop after 10 steps
+    early_stopping_method="generate"  # Generate final answer even if not finished
+)
+```
+
+### Mistake 3: Not Handling API Rate Limits
+
+OpenAI rate limits: 500 requests/minute (free tier). **Fix:**
+```python
+from langchain_openai import ChatOpenAI
+
+llm = ChatOpenAI(
+    model="gpt-4-turbo",
+    request_timeout=30,  # Timeout after 30 seconds
+    max_retries=3  # Retry failed requests
+)
+```
+
+**For high volume**, implement exponential backoff:
+```python
+import time
+from openai import RateLimitError
+
+def call_agent_with_backoff(agent, query, max_retries=5):
+    for i in range(max_retries):
+        try:
+            return agent.run(query)
+        except RateLimitError:
+            wait_time = 2 ** i  # 1s, 2s, 4s, 8s, 16s
+            print(f"Rate limited. Waiting {wait_time}s...")
+            time.sleep(wait_time)
+    raise Exception("Max retries exceeded")
+```
+
+### Mistake 4: Exposing API Keys in Code
+
+❌ **Never:**
+```python
+os.environ["OPENAI_API_KEY"] = "sk-abc123"  # Hard-coded key
+```
+
+✅ **Always:**
+```python
+from dotenv import load_dotenv
+import os
+
+load_dotenv()  # Loads from .env file
+api_key = os.getenv("OPENAI_API_KEY")
+
+if not api_key:
+    raise ValueError("OPENAI_API_KEY not found in environment")
+```
+
+### Mistake 5: No Input Validation on Tools
+
+User input goes directly to tools (security risk). **Fix:**
+```python
+def safe_file_read(filepath: str) -> str:
+    # Validate input
+    if ".." in filepath:
+        return "Error: Path traversal detected"
+    
+    allowed_dir = "/home/user/safe_dir"
+    full_path = os.path.abspath(filepath)
+    
+    if not full_path.startswith(allowed_dir):
+        return "Error: Access denied (outside allowed directory)"
+    
+    # Now safe to read
+    with open(full_path, 'r') as f:
+        return f.read()
+```
+
+---
+
+## Part 7: Real-World Use Cases (Build These Next)
+
+### Use Case 1: Customer Support Agent
+**Problem**: Support team overwhelmed with repetitive questions
+**Solution**: Agent answers FAQs, searches knowledge base, escalates complex issues
+
+**Tools needed:**
+- Knowledge base search (Pinecone, ChromaDB)
+- Ticket system integration (Zendesk API)
+- Email/Slack notification
+
+**Expected results:**
+- 70% of tickets resolved automatically
+- Response time: 2 minutes (vs. 4 hours human)
+- Cost: $50/month (vs. $3,000/month human support)
+
+### Use Case 2: Data Analysis Agent
+**Problem**: Analysts spend 80% time cleaning data, 20% analyzing
+**Solution**: Agent cleans data, generates visualizations, writes reports
+
+**Tools needed:**
+- Pandas integration (read/clean CSVs)
+- Chart generation (Matplotlib, Plotly)
+- SQL database access
+
+**Expected results:**
+- 10 reports/day (vs. 2 reports/day human)
+- 95% accuracy on data cleaning
+- Time savings: 30 hours/week
+
+### Use Case 3: Code Review Agent
+**Problem**: Code reviews bottleneck team velocity
+**Solution**: Agent reviews PRs, catches bugs, suggests improvements
+
+**Tools needed:**
+- GitHub API (fetch PR diffs)
+- Static analysis (Pylint, ESLint)
+- Security scanner (Bandit, Semgrep)
+
+**Expected results:**
+- Review all PRs within 5 minutes
+- Catch 89% of security issues
+- Free up senior engineers for architecture
+
+### Use Case 4: Content Creation Agent
+**Problem**: Blog requires 3 posts/week, but writer only produces 2
+**Solution**: Agent researches topic, writes draft, human edits/publishes
+
+**Tools needed:**
+- Web search (research trends)
+- SEO analysis (Ahrefs API)
+- Grammar check (LanguageTool API)
+
+**Expected results:**
+- 10 drafts/day (human picks best 3)
+- SEO-optimized (ranks in top 10)
+- 80% less writer's block
+
+---
+
+## Part 8: Advanced Topics (Where to Go Next)
+
+### 1. RAG (Retrieval-Augmented Generation)
+Train your agent on custom data (docs, policies, codebases):
+```python
+from langchain.vectorstores import Chroma
+from langchain.embeddings import OpenAIEmbeddings
+from langchain.document_loaders import TextLoader
+
+# Load your documents
+loader = TextLoader("company_policies.txt")
+documents = loader.load()
+
+# Create vector database
+embeddings = OpenAIEmbeddings()
+vectorstore = Chroma.from_documents(documents, embeddings)
+
+# Create retrieval tool
+retriever_tool = Tool(
+    name="PolicySearch",
+    func=lambda q: vectorstore.similarity_search(q, k=3),
+    description="Searches company policies. Use for questions about rules, procedures, or guidelines."
+)
+```
+
+**Cost**: ~$0.0004 per 1,000 words (one-time indexing cost)
+
+### 2. Fine-Tuning (Custom Behavior)
+Make GPT-4 behave exactly how you want:
+```bash
+# Prepare training data (100-1000 examples)
+{"messages": [{"role": "system", "content": "You are a helpful assistant."}, {"role": "user", "content": "How do I reset my password?"}, {"role": "assistant", "content": "Click 'Forgot Password' on the login page..."}]}
+
+# Fine-tune (via OpenAI API)
+openai api fine_tunes.create -t training_data.jsonl -m gpt-4-turbo
+```
+
+**Cost**: ~$8 per 1M tokens training, ~$0.06 per 1K tokens inference (3x base GPT-4)
+
+**When to fine-tune:**
+- Agent needs domain-specific knowledge (medical, legal, technical)
+- Specific tone/style required (formal, casual, brand voice)
+- Sensitive data (can't send to OpenAI)
+
+### 3. Local LLMs (No OpenAI Dependency)
+Run models locally (free, private):
+```bash
+# Install Ollama
+curl -fsSL https://ollama.com/install.sh | sh
+
+# Download model (e.g., Llama 3)
+ollama pull llama3
+
+# Use in LangChain
+from langchain.llms import Ollama
+
+llm = Ollama(model="llama3")
+agent = initialize_agent(tools=tools, llm=llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION)
+```
+
+**Pros**: Free, private, no rate limits
+**Cons**: Slower, lower quality than GPT-4, requires GPU
+
+### 4. Guardrails (Safety & Compliance)
+Prevent agents from saying/doing harmful things:
+```python
+from guardrails.hub import ToxicLanguage
+from guardrails import Guard
+
+# Create guardrail
+guard = Guard().use(ToxicLanguage, threshold=0.5, validation_method="sentence")
+
+# Wrap agent
+def safe_agent_run(agent, query):
+    response = agent.run(query)
+    validated_response = guard.validate(response)
+    return validated_response
+```
+
+**Common guardrails:**
+- **Toxicity filter**: Block offensive language
+- **PII detection**: Remove names, SSNs, credit cards
+- **Hallucination check**: Verify facts against knowledge base
+- **Budget limit**: Stop if cost exceeds $X
+
+---
+
+## Part 9: Key Takeaways & Next Steps
+
+### What You Built
+1. ✅ **Basic Agent** (10 lines): Question-answering with GPT-4
+2. ✅ **Tool Agent**: Search web, calculate, access files
+3. ✅ **Memory Agent**: Remember past conversations
+4. ✅ **Multi-Agent System**: Collaborative agents (research → analyze → write)
+5. ✅ **Production Agent**: Error handling, cost tracking, API deployment
+
+### Key Concepts Mastered
+- **Tools**: How agents interact with external systems
+- **Memory**: How agents maintain context
+- **Agent types**: When to use ZERO_SHOT vs. CONVERSATIONAL vs. OPENAI_FUNCTIONS
+- **Multi-agent patterns**: Orchestration, communication, graphs
+- **Production**: Deployment, monitoring, cost control
+
+### Next Steps (Build Your Own Agent)
+
+**Week 1: Pick a use case**
+- Choose something you personally need (automate a task you do daily)
+- Start simple (1-2 tools max)
+- Example: "Agent that reads my emails and summarizes important ones"
+
+**Week 2: Build & test**
+- Implement basic version (no fancy features yet)
+- Test with real data (your emails, your files, your tasks)
+- Iterate based on failures (agent will make mistakes—that's expected)
+
+**Week 3: Add production features**
+- Error handling (what happens when API fails?)
+- Cost tracking (is this affordable at scale?)
+- Monitoring (LangSmith or simple logging)
+
+**Week 4: Deploy & iterate**
+- Deploy somewhere (Heroku, AWS, or even cron job on your laptop)
+- Use it daily
+- Add features based on what you wish it could do
+
+### Resources to Continue Learning
+
+**Official Docs:**
+- LangChain: https://python.langchain.com/docs/
+- OpenAI: https://platform.openai.com/docs/
+- LangSmith (monitoring): https://docs.smith.langchain.com/
+
+**Communities:**
+- LangChain Discord: https://discord.gg/langchain
+- r/LangChain subreddit
+- OpenAI Community Forum
+
+**Advanced Topics:**
+- **AutoGPT**: Fully autonomous agents (no human input)
+- **LangGraph**: Complex agent workflows (loops, conditions, parallel execution)
+- **AgentOps**: Agent analytics and optimization
+- **MultiOn**: Browser-based agents (fill forms, click buttons)
+
+**Example Projects (Study These):**
+- **babyagi**: Task-driven autonomous agent
+- **GPT-Engineer**: Generates entire codebases
+- **MetaGPT**: Multi-agent software company (generates specs, code, tests)
+- **AutoPR**: Automated GitHub PR reviews
+
+---
+
+## Bonus: Complete Production Agent Template
+
+Save this as `production_agent_template.py` for your next project:
+
+```python
+"""
+Production AI Agent Template
+- Error handling
+- Cost tracking
+- Logging
+- Memory
+- Multiple tools
+- Health checks
+"""
+
+from langchain_openai import ChatOpenAI
+from langchain.agents import initialize_agent, AgentType, Tool
+from langchain.memory import ConversationBufferWindowMemory
+from langchain.callbacks import get_openai_callback
+from dotenv import load_dotenv
+import logging
+import os
+
+# --- Configuration ---
+load_dotenv()
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# --- Tools Definition ---
+def example_tool(input_text: str) -> str:
+    """Example tool - replace with your own"""
+    return f"Processed: {input_text}"
+
+tools = [
+    Tool(
+        name="ExampleTool",
+        func=example_tool,
+        description="Example tool description. Replace this."
+    )
+]
+
+# --- Agent Setup ---
+def create_agent():
+    """Creates and returns configured agent"""
+    llm = ChatOpenAI(
+        model="gpt-4-turbo",
+        temperature=0.7,
+        request_timeout=30,
+        max_retries=3
+    )
+    
+    memory = ConversationBufferWindowMemory(
+        k=5,
+        memory_key="chat_history",
+        return_messages=True
+    )
+    
+    agent = initialize_agent(
+        tools=tools,
+        llm=llm,
+        agent=AgentType.CONVERSATIONAL_REACT_DESCRIPTION,
+        memory=memory,
+        verbose=True,
+        max_iterations=10,
+        early_stopping_method="generate"
+    )
+    
+    return agent
+
+# --- Safe Execution ---
+def run_agent(agent, query: str, max_retries: int = 3):
+    """Runs agent with error handling and cost tracking"""
+    for attempt in range(max_retries):
+        try:
+            logger.info(f"Attempt {attempt + 1}: {query}")
+            
+            with get_openai_callback() as cb:
+                response = agent.run(query)
+                
+                # Log cost
+                logger.info(f"Cost: ${cb.total_cost:.4f} | Tokens: {cb.total_tokens}")
+                
+                # Alert if expensive
+                if cb.total_cost > 0.50:
+                    logger.warning(f"High cost detected: ${cb.total_cost:.4f}")
+                
+                return {
+                    "response": response,
+                    "cost": cb.total_cost,
+                    "tokens": cb.total_tokens
+                }
+                
+        except Exception as e:
+            logger.error(f"Attempt {attempt + 1} failed: {str(e)}")
+            if attempt == max_retries - 1:
+                return {
+                    "error": str(e),
+                    "response": "Agent failed. Please try again."
+                }
+
+# --- Main ---
+if __name__ == "__main__":
+    agent = create_agent()
+    
+    # Test queries
+    queries = [
+        "Hello, how are you?",
+        "What's 157 * 293?",
+        "Tell me a joke"
+    ]
+    
+    for query in queries:
+        print(f"\n{'='*60}")
+        print(f"Query: {query}")
+        print('='*60)
+        result = run_agent(agent, query)
+        print(f"Response: {result.get('response')}")
+        if 'cost' in result:
+            print(f"Cost: ${result['cost']:.4f}")
+```
+
+---
+
+## Final Thoughts
+
+You now know how to build AI agents—from simple chatbots to complex multi-agent systems. The real learning happens when you build your own. Pick a problem, start coding, and iterate.
+
+**Remember:**
+- Start simple (1 tool, 1 agent)
+- Test with real data (not toy examples)
+- Deploy early (even if imperfect)
+- Iterate based on failures (agents will fail—that's how you learn)
+
+**Most importantly**: Don't get paralyzed by all the options. Pick a use case, build it, ship it. You'll learn more from 1 deployed agent than from reading 10 tutorials.
+
+Good luck building! 🚀
+
+---
+
+**Want to level up your AI image workflows?** 
+Try **[AImage](https://aimage.io)** for powerful AI-powered photo editing tools that work seamlessly with your agents.
+
+<div style="text-align: center; margin: 2rem 0;">
+  <a href="https://aimage.io" style="display: inline-block; padding: 12px 24px; background-color: #3b82f6; color: white; text-decoration: none; border-radius: 8px; font-weight: 600;">
+    Try AImage for Free →
+  </a>
+</div>
