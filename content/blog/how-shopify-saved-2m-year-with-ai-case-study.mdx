@@ -249,7 +249,7 @@ Shopify's AI task force (15 people: engineering, product, finance, ops) evaluate
 1. **Intent Classification**: Identify if query is tier-1, 2, or 3 (GPT-4o, 95% accuracy)
 2. **RAG System**: Retrieve relevant docs from 200K+ knowledge base articles (Pinecone vector DB)
 3. **Response Generation**: Generate answer using fine-tuned model (Llama 3.1 70B)
-4. **Human-in-the-Loop**: If confidence <85%, escalate to human agent
+4. **Human-in-the-Loop**: If confidence less than 85%, escalate to human agent
 5. **Feedback Loop**: Agents rate AI responses, retrain model weekly
 
 **Key Innovation**: **Confidence Threshold Tuning**
@@ -1097,7 +1097,7 @@ Shopify expected AI to automate:
 **A**: **Human-in-the-loop** for all high-stakes decisions.
 
 **Examples**:
-- **Support chatbot**: If AI confidence <85%, escalate to human agent
+- **Support chatbot**: If AI confidence less than 85%, escalate to human agent
 - **Code review**: AI flags issues, human approves/rejects
 - **Content production**: AI writes first draft, human edits
 
@@ -1114,8 +1114,8 @@ Shopify expected AI to automate:
 | Metric | Target | Actual (April 2026) |
 |--------|--------|---------------------|
 | **Cost Savings** | $1.9M-2.8M/year | $2.23M/year ✅ |
-| **Support Response Time** | <4 hours | 3 hours ✅ |
-| **Code Review Time** | <6 hours/week | 5-7 hours/week ✅ |
+| **Support Response Time** | under 4 hours | 3 hours ✅ |
+| **Code Review Time** | under 6 hours/week | 5-7 hours/week ✅ |
 | **Content Output** | +300% | +460% ✅ |
 | **Customer Satisfaction** | No decrease | +5% ✅ |
 | **Employee Satisfaction** | No decrease | +12% ✅ |
