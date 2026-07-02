@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Read",
+      "Bash(ls *)",
+      "Bash(ls)",
+      "Bash(grep *)",
+      "Bash(find *)",
+      "Bash(cat *)",
+      "Bash(node *)",
+      "Bash(echo *)",
+      "Bash(wc *)",
+      "Bash(head *)",
+      "Bash(tail *)",
+      "Edit(*)",
+      "Write(*)"
+    ],
+    "defaultMode": "acceptEdits"
+  }
+}

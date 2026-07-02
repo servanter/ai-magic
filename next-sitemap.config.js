@@ -22,14 +22,23 @@ function getToolLinks() {
   }
 }
 
-// Dynamically read blog slugs from content/blog directory
-function getBlogSlugs() {
+// Dynamically read blog slugs and frontmatter dates from content/blog directory
+function getBlogSlugsWithDates() {
   try {
     const blogDir = path.join(__dirname, "content/blog");
     return fs
       .readdirSync(blogDir)
       .filter((f) => f.endsWith(".mdx"))
-      .map((f) => f.replace(/\.mdx$/, ""));
+      .map((f) => {
+        const slug = f.replace(/\.mdx$/, "");
+        let date = null;
+        try {
+          const content = fs.readFileSync(path.join(blogDir, f), "utf-8");
+          const match = content.match(/^date:\s*["']?(\d{4}-\d{2}-\d{2})["']?/m);
+          if (match) date = match[1];
+        } catch (_) {}
+        return { slug, date };
+      });
   } catch (e) {
     console.warn("[next-sitemap] Failed to read content/blog:", e.message);
     return [];
@@ -54,14 +63,17 @@ module.exports = {
   },
   additionalPaths: async (config) => {
     const toolLinks = getToolLinks();
-    const blogSlugs = getBlogSlugs();
+    const blogSlugsWithDates = getBlogSlugsWithDates();
 
     const toolPaths = await Promise.all(
       toolLinks.map((link) => config.transform(config, `/tools/${link}`))
     );
-    const blogPostPaths = await Promise.all(
-      blogSlugs.map((slug) => config.transform(config, `/blog/${slug}`))
-    );
+    const blogPostPaths = blogSlugsWithDates.map(({ slug, date }) => ({
+      loc: `/blog/${slug}`,
+      changefreq: config.changefreq,
+      priority: config.priority,
+      lastmod: date ? new Date(date + "T00:00:00.000Z").toISOString() : undefined,
+    }));
 
     return [
       // Homepage

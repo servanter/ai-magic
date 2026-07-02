@@ -45,8 +45,36 @@ export default async function BlogPostPage({ params }: PageProps) {
     notFound();
   }
 
+  const slug = params.slug?.join("/") || "";
+  const canonicalUrl = `https://www.aimage.top/blog/${slug}`;
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.description,
+    datePublished: new Date(post.date).toISOString(),
+    dateModified: new Date(post.date).toISOString(),
+    url: canonicalUrl,
+    mainEntityOfPage: { "@type": "WebPage", "@id": canonicalUrl },
+    author: {
+      "@type": "Organization",
+      name: "AImage",
+      url: "https://www.aimage.top",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "AImage",
+      url: "https://www.aimage.top",
+    },
+  };
+
   return (
-    <article className="container max-w-3xl py-6 lg:py-12">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <article className="container max-w-3xl py-6 lg:py-12">
       <div className="space-y-4">
         <div className="text-sm text-muted-foreground">
           <time dateTime={post.date}>
@@ -91,5 +119,6 @@ export default async function BlogPostPage({ params }: PageProps) {
         </a>
       </div>
     </article>
+    </>
   );
 }
